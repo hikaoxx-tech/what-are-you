@@ -75,12 +75,12 @@
     '正在通知你的动物来认领你…'
   ];
 
-  // 四档档位（与 data.js 的 a1/a2/b2/b1 对应）：程度词 + 计分 + 主/次档样式
+  // 四档档位（与 data.js 的 a1/a2/b2/b1 对应）：档位字母（A/B/C/D）+ 计分
   var DEGREES = [
-    { deg: '① 完全是我', cls: 'full left',  val: -1, key: 'a1' },
-    { deg: '② 有点像我', cls: 'soft left',  val: -0.5, key: 'a2' },
-    { deg: '③ 有点像我', cls: 'soft right', val: 0.5, key: 'b2' },
-    { deg: '④ 完全是我', cls: 'full right', val: 1, key: 'b1' }
+    { letter: 'A', val: -1,   key: 'a1' },
+    { letter: 'B', val: -0.5, key: 'a2' },
+    { letter: 'C', val: 0.5,  key: 'b2' },
+    { letter: 'D', val: 1,    key: 'b1' }
   ];
 
   function initScores() {
@@ -264,10 +264,10 @@
       return;
     }
 
-    // 普通题：四档程度制，四个完整按钮竖排（①④ 主档实心 / ②③ 次档浅描边）
+    // 普通题：四档程度制，四个完整按钮竖排（标签 A/B/C/D，统一白底无额外装饰）
     var hint = document.createElement('p');
     hint.className = 'q-hint';
-    hint.textContent = '选「有点像我」说明你两边都沾——按直觉来，没有标准答案';
+    hint.textContent = '四个选项都是正常反应，没有对错——按直觉来就行';
     box.appendChild(hint);
 
     var group = document.createElement('div');
@@ -275,10 +275,10 @@
     group.setAttribute('role', 'radiogroup');
     DEGREES.forEach(function (item, i) {
       var btn = document.createElement('button');
-      btn.className = 'option deg ' + item.cls;
+      btn.className = 'option deg';
       btn.setAttribute('role', 'radio');
       btn.innerHTML = '<span class="deg-label"></span><span class="deg-text"></span>';
-      btn.firstChild.textContent = item.deg;
+      btn.firstChild.textContent = item.letter;
       btn.lastChild.textContent = q[item.key];
       btn.style.animationDelay = (120 + i * 70) + 'ms';
       btn.addEventListener('click', function () { choose(item.val, btn); });

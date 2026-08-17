@@ -58,7 +58,11 @@ with sync_playwright() as p:
     n4 = page.locator('#q-options .option').count()
     check('普通题渲染 4 个按钮', n4 == 4, 'count=' + str(n4))
     labels = page.locator('#q-options .option .deg-label').all_inner_texts()
-    check('程度标签为 ①②③④ 完整档', labels == ['① 完全是我', '② 有点像我', '③ 有点像我', '④ 完全是我'], str(labels))
+    check('选项标签为 A/B/C/D', labels == ['A', 'B', 'C', 'D'], str(labels))
+    styles = page.locator('#q-options .option.deg').evaluate_all(
+        'els => els.map(el => { var s = getComputedStyle(el); return s.backgroundColor + "|" + s.borderStyle; })')
+    check('四档选项框统一白底实线（无额外设计）',
+          styles == ['rgb(255, 255, 255)|solid'] * 4, str(styles))
     first_text = page.locator('#q-options .option').first.locator('.deg-text').inner_text()
     check('按钮含 v4 完整句子', '认识新朋友对我来说是放松不是消耗' in first_text, first_text[:30])
     hint = page.locator('.q-hint').inner_text()

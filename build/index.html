@@ -373,7 +373,7 @@ body {
               linear-gradient(135deg, #2581C4, #7B5FC0) border-box;
 }
 
-/* ---------- 四档程度制（14 号文档 v4） ---------- */
+/* ---------- 四档程度制（A/B/C/D 白底选项） ---------- */
 /* 引导语：缓解"两个都沾一点"的犹豫 */
 .q-hint {
   font-size: 12px;
@@ -382,30 +382,17 @@ body {
   line-height: 1.6;
   margin: 0 0 16px;
 }
-/* 四个完整按钮竖排：程度词小标签 + 倾向句正文 */
+/* 四个完整按钮竖排：档位字母（A/B/C/D）+ 倾向句正文，统一白底 */
 .option.deg { padding: 13px 16px; }
 .option.deg .deg-label {
-  display: block;
-  font-size: 12px;
+  display: inline-block;
+  min-width: 20px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
+  color: #7B5FC0;
+  margin-right: 8px;
 }
-.option.deg .deg-text { display: block; }
-/* ①④ 主档：实心描边 + 方向色底（A 侧蓝 / B 侧红） */
-.option.deg.full { border-width: 2px; }
-.option.deg.full.left {
-  background: linear-gradient(135deg, #EAF2FA, #F3EEFB);
-  border-color: #2581C4;
-}
-.option.deg.full.right {
-  background: linear-gradient(135deg, #FDF0EF, #F3EEFB);
-  border-color: #E8716A;
-}
-/* ②③ 次档：虚线浅描边，弱表态 */
-.option.deg.soft { border-style: dashed; background: #fff; }
-.option.deg.soft.left { border-color: #9DB8D6; }
-.option.deg.soft.right { border-color: #D8AFA5; }
+.option.deg .deg-text { display: inline; }
 
 /* ---------- 分析中 ---------- */
 .loading {
@@ -1192,10 +1179,10 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
 // 《你是什么东西》题库与人格数据
 // 来源：04-执行端-测试题目.md / 06-执行端-人格完整文案.md
 //       13 号题目优化草案（锚点句）+ 14 号四档程度制题库 v4（本版定稿）
-// 约定：28 道计分题为四档程度制，每题 4 个档位：
-//   a1 完全是我（A 极，-1） / a2 有点像我（偏 A，-0.5）
-//   b2 有点像我（偏 B，+0.5） / b1 完全是我（B 极，+1）
-//   ①④ 与 13 号草案锚点句逐字一致；②③ 为同倾向柔和变体
+// 约定：28 道计分题为四档程度制，每题 4 个档位（按钮标签 A/B/C/D）：
+//   A = a1（完全是我，-1） / B = a2（有点像我，偏 A，-0.5）
+//   C = b2（有点像我，偏 B，+0.5） / D = b1（完全是我，+1）
+//   A/D 与 13 号草案锚点句逐字一致；B/C 为同倾向柔和变体
 //   彩蛋题 dim 为 null，保持二选一（a/b），不计分
 // ============================================================
 
@@ -1700,12 +1687,12 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     '正在通知你的动物来认领你…'
   ];
 
-  // 四档档位（与 data.js 的 a1/a2/b2/b1 对应）：程度词 + 计分 + 主/次档样式
+  // 四档档位（与 data.js 的 a1/a2/b2/b1 对应）：档位字母（A/B/C/D）+ 计分
   var DEGREES = [
-    { deg: '① 完全是我', cls: 'full left',  val: -1, key: 'a1' },
-    { deg: '② 有点像我', cls: 'soft left',  val: -0.5, key: 'a2' },
-    { deg: '③ 有点像我', cls: 'soft right', val: 0.5, key: 'b2' },
-    { deg: '④ 完全是我', cls: 'full right', val: 1, key: 'b1' }
+    { letter: 'A', val: -1,   key: 'a1' },
+    { letter: 'B', val: -0.5, key: 'a2' },
+    { letter: 'C', val: 0.5,  key: 'b2' },
+    { letter: 'D', val: 1,    key: 'b1' }
   ];
 
   function initScores() {
@@ -1889,10 +1876,10 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
       return;
     }
 
-    // 普通题：四档程度制，四个完整按钮竖排（①④ 主档实心 / ②③ 次档浅描边）
+    // 普通题：四档程度制，四个完整按钮竖排（标签 A/B/C/D，统一白底无额外装饰）
     var hint = document.createElement('p');
     hint.className = 'q-hint';
-    hint.textContent = '选「有点像我」说明你两边都沾——按直觉来，没有标准答案';
+    hint.textContent = '四个选项都是正常反应，没有对错——按直觉来就行';
     box.appendChild(hint);
 
     var group = document.createElement('div');
@@ -1900,10 +1887,10 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     group.setAttribute('role', 'radiogroup');
     DEGREES.forEach(function (item, i) {
       var btn = document.createElement('button');
-      btn.className = 'option deg ' + item.cls;
+      btn.className = 'option deg';
       btn.setAttribute('role', 'radio');
       btn.innerHTML = '<span class="deg-label"></span><span class="deg-text"></span>';
-      btn.firstChild.textContent = item.deg;
+      btn.firstChild.textContent = item.letter;
       btn.lastChild.textContent = q[item.key];
       btn.style.animationDelay = (120 + i * 70) + 'ms';
       btn.addEventListener('click', function () { choose(item.val, btn); });
