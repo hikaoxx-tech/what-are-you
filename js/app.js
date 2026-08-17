@@ -21,6 +21,13 @@
   var viewingCode = null; // 当前查看的人格代码
   var ARCHIVE_KEY = 'wa_archives';
   var IS_WECHAT = /MicroMessenger/i.test(navigator.userAgent);
+  // 正式线上地址：分享/二维码一律用它。
+  // location.href 在本地测试（file:// / localhost）时会生成别人打不开的链接，
+  // 所以只有当前确实在正式域名上时才保留当前 URL（可带 ?v= 参数绕微信缓存）。
+  var SHARE_URL = 'https://hikaoxx-tech.github.io/what-are-you/';
+  function shareUrl() {
+    return location.hostname === 'hikaoxx-tech.github.io' ? location.href : SHARE_URL;
+  }
   var TEASER_IDX = [2, 9, 10]; // 封面试读题：Q3 / Q10 / Q11
   var teaserPos = 0;
   var LOADING_LINES = [
@@ -147,7 +154,7 @@
     var qr = $('qrcode');
     qr.innerHTML = '';
     if (window.QRCode) {
-      new QRCode(qr, { text: location.href, width: 84, height: 84, colorDark: '#2B2F36' });
+      new QRCode(qr, { text: shareUrl(), width: 84, height: 84, colorDark: '#2B2F36' });
     }
   }
 
@@ -231,7 +238,7 @@
     // 转发挑战：只有"我的结果"才显示
     $('share-challenge').classList.toggle('hidden', !mine);
     if (mine) {
-      $('sc-text').textContent = '我测出来是「' + t.name + '·' + t.animal + '」，你是什么东西？ ' + location.href;
+      $('sc-text').textContent = '我测出来是「' + t.name + '·' + t.animal + '」，你是什么东西？ ' + shareUrl();
     }
   }
 
@@ -376,7 +383,7 @@
     var t = TYPES[viewingCode];
     var btn = this;
     copyToClipboard(
-      '这份「' + t.name + '·' + t.animal + '」的档案，我觉得写的就是你：' + location.href,
+      '这份「' + t.name + '·' + t.animal + '」的档案，我觉得写的就是你：' + shareUrl(),
       function (ok) {
         btn.textContent = ok ? '已复制，去发给 TA' : '复制失败，请长按上方文字复制';
         setTimeout(function () { btn.textContent = '复制并发给 TA'; }, 2200);
