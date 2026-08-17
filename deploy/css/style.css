@@ -687,15 +687,43 @@ body {
   max-height: 72vh;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, .5);
+  /* 微信内长按保存依赖系统长按菜单，显式声明可防止被全局样式禁用 */
+  -webkit-touch-callout: default;
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+.save-hint {
+  margin: 14px 0 0;
+  color: #FFD666;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.6;
+  animation: hintPulse 1.6s ease-in-out infinite;
+}
+.save-hint-sub {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, .78);
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@keyframes hintPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .55; }
 }
 .overlay-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 14px;
+  margin-top: 18px;
   width: 100%;
-  max-width: 320px;
+  max-width: 400px;
 }
 .overlay-actions .btn-main, .overlay-actions .btn-ghost { margin: 0; flex: 1; }
+/* 保存按钮加大加宽，遮罩内主操作位 */
+.overlay-actions .btn-download-lg { flex: 1.5; padding: 16px 0; font-size: 18px; letter-spacing: 6px; }
 
 /* ---------- 通用 ---------- */
 @keyframes fadeIn {

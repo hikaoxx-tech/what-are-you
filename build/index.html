@@ -704,15 +704,43 @@ body {
   max-height: 72vh;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, .5);
+  /* 微信内长按保存依赖系统长按菜单，显式声明可防止被全局样式禁用 */
+  -webkit-touch-callout: default;
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+.save-hint {
+  margin: 14px 0 0;
+  color: #FFD666;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.6;
+  animation: hintPulse 1.6s ease-in-out infinite;
+}
+.save-hint-sub {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, .78);
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@keyframes hintPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .55; }
 }
 .overlay-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 14px;
+  margin-top: 18px;
   width: 100%;
-  max-width: 320px;
+  max-width: 400px;
 }
 .overlay-actions .btn-main, .overlay-actions .btn-ghost { margin: 0; flex: 1; }
+/* 保存按钮加大加宽，遮罩内主操作位 */
+.overlay-actions .btn-download-lg { flex: 1.5; padding: 16px 0; font-size: 18px; letter-spacing: 6px; }
 
 /* ---------- 通用 ---------- */
 @keyframes fadeIn {
@@ -861,8 +889,9 @@ var _hmt = _hmt || [];
 <div id="overlay" class="hidden">
   <div class="overlay-inner">
     <img id="captured-img" alt="你的非官方人格备案">
+    <p id="save-hint" class="save-hint hidden">长按上方图片，保存到相册<span class="save-hint-sub">若长按没反应：点右上角 ··· 在浏览器中打开，再点「保存图片」下载</span></p>
     <div class="overlay-actions">
-      <a id="btn-download" class="btn-main" download="你是什么东西.png">保存图片</a>
+      <a id="btn-download" class="btn-main btn-download-lg" download="你是什么东西.png">保存图片</a>
       <button id="btn-close" class="btn-ghost">关闭</button>
     </div>
   </div>
@@ -1782,6 +1811,15 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
       var img = $('captured-img');
       img.src = canvas.toDataURL('image/png');
       $('btn-download').href = img.src;
+      // 微信内置浏览器会拦截 <a download>（提示"在浏览器中打开下载"），
+      // 改为引导长按图片保存——微信长按 <img> 可直接存相册
+      if (IS_WECHAT) {
+        $('btn-download').classList.add('hidden');
+        $('save-hint').classList.remove('hidden');
+      } else {
+        $('btn-download').classList.remove('hidden');
+        $('save-hint').classList.add('hidden');
+      }
       $('overlay').classList.remove('hidden');
       btn.disabled = false;
       btn.textContent = '生成分享长图';

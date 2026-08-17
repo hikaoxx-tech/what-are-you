@@ -512,6 +512,15 @@
       var img = $('captured-img');
       img.src = canvas.toDataURL('image/png');
       $('btn-download').href = img.src;
+      // 微信内置浏览器会拦截 <a download>（提示"在浏览器中打开下载"），
+      // 改为引导长按图片保存——微信长按 <img> 可直接存相册
+      if (IS_WECHAT) {
+        $('btn-download').classList.add('hidden');
+        $('save-hint').classList.remove('hidden');
+      } else {
+        $('btn-download').classList.remove('hidden');
+        $('save-hint').classList.add('hidden');
+      }
       $('overlay').classList.remove('hidden');
       btn.disabled = false;
       btn.textContent = '生成分享长图';
