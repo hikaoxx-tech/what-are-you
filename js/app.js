@@ -2,6 +2,12 @@
 // 《你是什么东西》交互逻辑
 // 计分规则（03 文档）：每题 A=-1 / B=+1，每维 7 题，-7..+7
 // >0 判右极，<0 判左极；彩蛋题（dim=null）不计分
+//
+// 模式（转化优化）：
+//   full    = 完整版 30 题（每维 7 题）
+//   quick   = 快测版 12 题（每维抽第 1/4/7 题，3 题为奇数，无平局）
+//   upgrade = 快测完成后补 18 题升级完整档案（快测分保留累加）
+// 断点续答：localStorage 存进度，回访时封面显示"继续上次测试"
 // ============================================================
 
 (function () {
@@ -15,11 +21,27 @@
   var GALLERY_ORDER = ['ESTJ','ESTP','ESFJ','ESFP','ENTJ','ENTP','ENFJ','ENFP',
                        'ISTJ','ISTP','ISFJ','ISFP','INTJ','INTP','INFJ','INFP'];
 
+  // ---------- 模式与题目列表 ----------
+  var MODE_FULL = 'full', MODE_QUICK = 'quick', MODE_UPGRADE = 'upgrade';
+  var currentMode = MODE_FULL;
+  // 快测每维抽 3 题：该维第 1/4/7 题（下标：EI:0,12,25 / SN:1,13,26 / TF:2,15,27 / JP:3,16,28）
+  var QUICK_PICKS = [0, 12, 25, 1, 13, 26, 2, 15, 27, 3, 16, 28];
+  function questionList(mode) {
+    if (mode === MODE_QUICK) {
+      return QUICK_PICKS.map(function (i) { return QUESTIONS[i]; });
+    }
+    if (mode === MODE_UPGRADE) {
+      return QUESTIONS.filter(function (q, i) { return QUICK_PICKS.indexOf(i) < 0; });
+    }
+    return QUESTIONS;
+  }
+
   var scores = {};        // 每维得分
-  var idx = 0;            // 当前题下标
+  var idx = 0;            // 当前题在 questionList 中的下标
   var myCode = null;      // 我的结果代码
   var viewingCode = null; // 当前查看的人格代码
   var ARCHIVE_KEY = 'wa_archives';
+  var PROGRESS_KEY = 'wa_progress';
   var IS_WECHAT = /MicroMessenger/i.test(navigator.userAgent);
   // 正式线上地址：分享/二维码一律用它。
   // location.href 在本地测试（file:// / localhost）时会生成别人打不开的链接，
@@ -57,6 +79,53 @@
       $(p).classList.toggle('hidden', p !== id);
     });
     window.scrollTo(0, 0);
+  }
+
+  // ---------- 断点续答：进度存取 ----------
+
+  function saveProgress() {
+    try {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+        mode: currentMode, idx: idx, scores: scores, done: false, ts: Date.now()
+      }));
+    } catch (e) {}
+  }
+
+  // 快测答完：保留进度（done=true），供"升级补测"恢复
+  function saveQuickDone() {
+    try {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+        mode: MODE_QUICK, idx: idx, scores: scores, done: true, ts: Date.now()
+      }));
+    } catch (e) {}
+  }
+
+  function clearProgress() {
+    try { localStorage.removeItem(PROGRESS_KEY); } catch (e) {}
+  }
+
+  function readProgress() {
+    try {
+      var p = JSON.parse(localStorage.getItem(PROGRESS_KEY) || 'null');
+      if (!p || !p.scores) { return null; }
+      return p;
+    } catch (e) { return null; }
+  }
+
+  function resumeLabel(p) {
+    if (p.done && p.mode === MODE_QUICK) { return '继续升级完整档案（还差 18 题）'; }
+    var list = questionList(p.mode);
+    var total = list.length;
+    var tag = p.mode === MODE_QUICK ? '快测' : (p.mode === MODE_UPGRADE ? '补测' : '');
+    return '继续上次测试（' + tag + '第 ' + (Math.min(p.idx, total - 1) + 1) + ' / ' + total + ' 题）';
+  }
+
+  function renderResume() {
+    var p = readProgress();
+    var btn = $('btn-resume');
+    if (!p) { btn.classList.add('hidden'); return; }
+    btn.textContent = resumeLabel(p);
+    btn.classList.remove('hidden');
   }
 
   // ---------- 封面试读题 / 归档计数 / 动物条 ----------
@@ -114,10 +183,29 @@
   // ---------- 答题 ----------
 
   function renderQuestion() {
-    var q = QUESTIONS[idx];
-    $('q-count').textContent = '第 ' + (idx + 1) + ' / ' + QUESTIONS.length + ' 题';
-    $('q-bar').style.width = ((idx + 1) / QUESTIONS.length * 100) + '%';
-    $('q-title').textContent = q.q;
+    var list = questionList(currentMode);
+    var q = list[idx];
+    $('q-count').textContent = '第 ' + (idx + 1) + ' / ' + list.length + ' 题';
+    $('q-bar').style.width = ((idx + 1) / list.length * 100) + '%';
+
+    // 模式标签：快测 / 补测
+    var modeTag = $('q-mode');
+    if (currentMode === MODE_QUICK) {
+      modeTag.textContent = '快测';
+      modeTag.classList.remove('hidden');
+    } else if (currentMode === MODE_UPGRADE) {
+      modeTag.textContent = '补测';
+      modeTag.classList.remove('hidden');
+    } else {
+      modeTag.classList.add('hidden');
+    }
+
+    // 换题动画（重触发）
+    var title = $('q-title');
+    title.textContent = q.q;
+    title.classList.remove('q-anim');
+    void title.offsetWidth;
+    title.classList.add('q-anim');
 
     var box = $('q-options');
     box.innerHTML = '';
@@ -125,13 +213,15 @@
       var btn = document.createElement('button');
       btn.className = 'option';
       btn.textContent = text;
+      btn.style.animationDelay = (120 + i * 90) + 'ms'; // slide-up stagger
       btn.addEventListener('click', function () { choose(i, btn); });
       box.appendChild(btn);
     });
   }
 
   function choose(i, btn) {
-    var q = QUESTIONS[idx];
+    var list = questionList(currentMode);
+    var q = list[idx];
     if (q.dim) { scores[q.dim] += (i === 0 ? -1 : 1); }
 
     btn.classList.add('selected');
@@ -139,16 +229,30 @@
 
     setTimeout(function () {
       idx++;
-      if (idx < QUESTIONS.length) {
+      if (idx < list.length) {
+        saveProgress();
         renderQuestion();
       } else {
-        showPage('page-loading');
-        $('loading-main').textContent =
-          LOADING_LINES[Math.floor(Math.random() * LOADING_LINES.length)];
-        track('完成测试');
-        setTimeout(function () { showResult(true); }, 1500); // 1.5s 仪式感
+        finishQuiz();
       }
     }, 260);
+  }
+
+  // 答完当前模式的题：快测 → 快测结果页（保留进度可升级）；其余 → 完整结果
+  function finishQuiz() {
+    if (currentMode === MODE_QUICK) {
+      track('快测完成');
+      saveQuickDone();
+    } else {
+      if (currentMode === MODE_UPGRADE) { track('升级完成'); }
+      else { track('完成测试'); }
+      clearProgress();
+      currentMode = MODE_FULL; // 升级/完整版完成后按完整版渲染（稀有度徽章出现）
+    }
+    showPage('page-loading');
+    $('loading-main').textContent =
+      LOADING_LINES[Math.floor(Math.random() * LOADING_LINES.length)];
+    setTimeout(function () { showResult(true); }, 1500); // 1.5s 仪式感
   }
 
   // ---------- 结果 ----------
@@ -247,15 +351,26 @@
     // 转发对象（Practical Value）：窄受众 = 更愿意转发
     $('give-text').textContent = t.giveTo;
 
-    // 稀有度徽章只有"我的结果"才有（基于我的答题极端度）
+    // 稀有度徽章：仅完整版（快测版无极端度，显示会失真）
     var rarity = $('r-rarity');
-    rarity.classList.toggle('hidden', !mine);
-    if (mine) { rarity.textContent = rarityOf(); }
+    var showRarity = mine && currentMode !== MODE_QUICK;
+    rarity.classList.toggle('hidden', !showRarity);
+    if (showRarity) { rarity.textContent = rarityOf(); }
 
     // 转发挑战：只有"我的结果"才显示
     $('share-challenge').classList.toggle('hidden', !mine);
     if (mine) {
       $('sc-text').textContent = '我测出来是「' + t.name + '·' + t.animal + '」，你是什么东西？ ' + shareUrl();
+    }
+  }
+
+  // 盖章动画（全站签名时刻）：每次结果渲染重触发
+  function stampResult() {
+    var stamp = document.querySelector('#result-card .stamp');
+    if (stamp) {
+      stamp.classList.remove('stamp-strike');
+      void stamp.offsetWidth;
+      stamp.classList.add('stamp-strike');
     }
   }
 
@@ -276,9 +391,15 @@
       $('r-scales').querySelectorAll('.scale-fill').forEach(function (f) { f.style.display = 'none'; });
     }
 
+    // 快测注记 + 升级按钮（仅"我的结果"且处于快测态）
+    var isQuick = mine && currentMode === MODE_QUICK;
+    $('r-quick-note').classList.toggle('hidden', !isQuick);
+    $('btn-upgrade').classList.toggle('hidden', !isQuick);
+
     $('btn-back-mine').classList.toggle('hidden', mine);
     showPage('page-result');
     makeQR(); // 页面可见后再生成二维码
+    stampResult();
   }
 
   // ---------- 全部人格 ----------
@@ -302,6 +423,7 @@
         $('btn-back-mine').classList.remove('hidden');
         showPage('page-result');
         makeQR();
+        stampResult();
       });
       grid.appendChild(card);
     });
@@ -309,18 +431,55 @@
 
   // ---------- 事件绑定 ----------
 
-  $('btn-start').addEventListener('click', function () {
+  function startQuiz(mode) {
+    clearProgress();
+    currentMode = mode;
     idx = 0;
     initScores();
+    renderQuestion();
+    showPage('page-quiz');
+  }
+
+  $('btn-start').addEventListener('click', function () {
+    startQuiz(MODE_FULL);
+  });
+
+  $('btn-start-quick').addEventListener('click', function () {
+    track('开始快测');
+    startQuiz(MODE_QUICK);
+  });
+
+  // 断点续答
+  $('btn-resume').addEventListener('click', function () {
+    var p = readProgress();
+    if (!p) { renderResume(); return; }
+    track('恢复进度');
+    currentMode = p.mode;
+    scores = p.scores; // 恢复已得分数（快测分保留给补测累加）
+    if (p.done && p.mode === MODE_QUICK) {
+      // 快测已完成 → 直接进入补测阶段
+      currentMode = MODE_UPGRADE;
+      idx = 0;
+      saveProgress();
+    } else {
+      idx = p.idx || 0;
+    }
+    renderQuestion();
+    showPage('page-quiz');
+  });
+
+  // 快测结果页 → 补 18 题升级完整档案
+  $('btn-upgrade').addEventListener('click', function () {
+    track('升级补测');
+    currentMode = MODE_UPGRADE;
+    idx = 0;
+    saveProgress(); // scores 已含快测分，继续累加
     renderQuestion();
     showPage('page-quiz');
   });
 
   $('btn-restart').addEventListener('click', function () {
-    idx = 0;
-    initScores();
-    renderQuestion();
-    showPage('page-quiz');
+    startQuiz(MODE_FULL);
   });
 
   $('btn-back-mine').addEventListener('click', function () {
@@ -336,7 +495,7 @@
     showResult(true);
   });
 
-  // 生成分享长图
+  // 生成分享长图（等标题字体加载完再截，避免截到 fallback 字体）
   $('btn-capture').addEventListener('click', function () {
     if (!window.html2canvas) {
       alert('图片库加载失败，请检查网络后重试');
@@ -345,20 +504,21 @@
     var btn = this;
     btn.disabled = true;
     btn.textContent = '正在盖章…';
-    html2canvas($('result-card'), { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' })
-      .then(function (canvas) {
-        track('保存长图');
-        var img = $('captured-img');
-        img.src = canvas.toDataURL('image/png');
-        $('btn-download').href = img.src;
-        $('overlay').classList.remove('hidden');
-        btn.disabled = false;
-        btn.textContent = '生成分享长图';
-      })
-      .catch(function () {
-        btn.disabled = false;
-        btn.textContent = '生成分享长图';
-      });
+    var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    fontsReady.then(function () {
+      return html2canvas($('result-card'), { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' });
+    }).then(function (canvas) {
+      track('保存长图');
+      var img = $('captured-img');
+      img.src = canvas.toDataURL('image/png');
+      $('btn-download').href = img.src;
+      $('overlay').classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = '生成分享长图';
+    }).catch(function () {
+      btn.disabled = false;
+      btn.textContent = '生成分享长图';
+    });
   });
 
   $('btn-close').addEventListener('click', function () {
@@ -423,5 +583,6 @@
   setInterval(cycleTeaser, 4200);
   renderArchiveCount();
   renderAnimalStrip();
+  renderResume();
   showPage('page-start');
 })();
