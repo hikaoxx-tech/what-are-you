@@ -17,6 +17,8 @@ html = (ROOT / 'index.html').read_text(encoding='utf-8')
 css = (ROOT / 'css' / 'style.css').read_text(encoding='utf-8')
 data_js = (ROOT / 'js' / 'data.js').read_text(encoding='utf-8')
 app_js = (ROOT / 'js' / 'app.js').read_text(encoding='utf-8')
+html2canvas_js = (ROOT / 'assets' / 'vendor' / 'html2canvas.min.js').read_text(encoding='utf-8')
+qrcode_js = (ROOT / 'assets' / 'vendor' / 'qrcode.min.js').read_text(encoding='utf-8')
 
 # 16 张动物 SVG → data URI（utf8 编码，全量转义）
 icons = {}
@@ -28,6 +30,12 @@ embed = 'var EMBED_ICONS = ' + json.dumps(icons, ensure_ascii=False) + ';'
 out = html.replace(
     '<link rel="stylesheet" href="css/style.css">',
     '<style>\n' + css + '\n</style>'
+).replace(
+    '<script src="assets/vendor/html2canvas.min.js"></script>',
+    '<script>\n' + html2canvas_js + '\n</script>'
+).replace(
+    '<script src="assets/vendor/qrcode.min.js"></script>',
+    '<script>\n' + qrcode_js + '\n</script>'
 ).replace(
     '<script src="js/data.js"></script>',
     '<script>\n' + data_js + '\n</script>'
