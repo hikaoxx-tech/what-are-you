@@ -356,6 +356,40 @@ body {
               linear-gradient(135deg, #2581C4, #7B5FC0) border-box;
 }
 
+/* ---------- 四档程度制（14 号文档 v4） ---------- */
+/* 引导语：缓解"两个都沾一点"的犹豫 */
+.q-hint {
+  font-size: 12px;
+  color: #9CA3AF;
+  text-align: center;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+/* 四个完整按钮竖排：程度词小标签 + 倾向句正文 */
+.option.deg { padding: 13px 16px; }
+.option.deg .deg-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.option.deg .deg-text { display: block; }
+/* ①④ 主档：实心描边 + 方向色底（A 侧蓝 / B 侧红） */
+.option.deg.full { border-width: 2px; }
+.option.deg.full.left {
+  background: linear-gradient(135deg, #EAF2FA, #F3EEFB);
+  border-color: #2581C4;
+}
+.option.deg.full.right {
+  background: linear-gradient(135deg, #FDF0EF, #F3EEFB);
+  border-color: #E8716A;
+}
+/* ②③ 次档：虚线浅描边，弱表态 */
+.option.deg.soft { border-style: dashed; background: #fff; }
+.option.deg.soft.left { border-color: #9DB8D6; }
+.option.deg.soft.right { border-color: #D8AFA5; }
+
 /* ---------- 分析中 ---------- */
 .loading {
   display: flex;

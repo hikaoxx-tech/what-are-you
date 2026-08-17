@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>你是什么东西 · 非官方人格备案</title>
-<meta name="description" content="30 道二选一，几分钟出结果。测出你的地狱人格代号——测完别删，留着自己哭。">
+<meta name="description" content="30 道程度题，几分钟出结果。测出你的地狱人格代号——测完别删，留着自己哭。">
 <meta name="theme-color" content="#131C33">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="你是什么东西">
 <meta property="og:title" content="你是什么东西 · 非官方人格备案">
-<meta property="og:description" content="30 道二选一，几分钟出结果。测出你的地狱人格代号——测完别删，留着自己哭。">
+<meta property="og:description" content="30 道程度题，几分钟出结果。测出你的地狱人格代号——测完别删，留着自己哭。">
 <meta property="og:image" content="https://hikaoxx-tech.github.io/what-are-you/assets/share-card.png">
 <meta property="og:image:width" content="800">
 <meta property="og:image:height" content="800">
@@ -372,6 +372,40 @@ body {
   background: linear-gradient(#F3F7FC, #F3F7FC) padding-box,
               linear-gradient(135deg, #2581C4, #7B5FC0) border-box;
 }
+
+/* ---------- 四档程度制（14 号文档 v4） ---------- */
+/* 引导语：缓解"两个都沾一点"的犹豫 */
+.q-hint {
+  font-size: 12px;
+  color: #9CA3AF;
+  text-align: center;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+/* 四个完整按钮竖排：程度词小标签 + 倾向句正文 */
+.option.deg { padding: 13px 16px; }
+.option.deg .deg-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.option.deg .deg-text { display: block; }
+/* ①④ 主档：实心描边 + 方向色底（A 侧蓝 / B 侧红） */
+.option.deg.full { border-width: 2px; }
+.option.deg.full.left {
+  background: linear-gradient(135deg, #EAF2FA, #F3EEFB);
+  border-color: #2581C4;
+}
+.option.deg.full.right {
+  background: linear-gradient(135deg, #FDF0EF, #F3EEFB);
+  border-color: #E8716A;
+}
+/* ②③ 次档：虚线浅描边，弱表态 */
+.option.deg.soft { border-style: dashed; background: #fff; }
+.option.deg.soft.left { border-color: #9DB8D6; }
+.option.deg.soft.right { border-color: #D8AFA5; }
 
 /* ---------- 分析中 ---------- */
 .loading {
@@ -978,7 +1012,7 @@ var _hmt = _hmt || [];
     <p class="cover-kicker">非官方人格备案 · 档案编号 No.2025-001</p>
     <h1 class="cover-title">你是什么<br>东西？</h1>
     <p class="cover-subtitle">测完别删，留着自己哭</p>
-    <p class="cover-meta">30 道二选一 · 16 种地狱人格 · 约 3 分钟</p>
+    <p class="cover-meta">30 道程度题 · 16 种地狱人格 · 约 4 分钟</p>
     <div class="cover-teaser" id="cover-teaser">
       <p class="ct-label">档案试读 · 第 <span id="ct-num"></span> 题</p>
       <p class="ct-q" id="ct-q"></p>
@@ -1157,127 +1191,188 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
 // ============================================================
 // 《你是什么东西》题库与人格数据
 // 来源：04-执行端-测试题目.md / 06-执行端-人格完整文案.md
-// 约定：A = 左极(-1)，B = 右极(+1)；彩蛋题 dim 为 null，不计分
+//       13 号题目优化草案（锚点句）+ 14 号四档程度制题库 v4（本版定稿）
+// 约定：28 道计分题为四档程度制，每题 4 个档位：
+//   a1 完全是我（A 极，-1） / a2 有点像我（偏 A，-0.5）
+//   b2 有点像我（偏 B，+0.5） / b1 完全是我（B 极，+1）
+//   ①④ 与 13 号草案锚点句逐字一致；②③ 为同倾向柔和变体
+//   彩蛋题 dim 为 null，保持二选一（a/b），不计分
 // ============================================================
 
 var QUESTIONS = [
   // Q1 E/I
   { dim: 'EI', q: '你走进一家全是陌生人的聚会，你会：',
-    a: '立刻找话题加入一群人，笑着自我介绍，心里默念"他们喜不喜欢我"',
-    b: '先拿杯酒站角落，观察十分钟，等有人来找你再说' },
+    a1: '主动找人聊，认识新朋友对我来说是放松不是消耗',
+    a2: '有人起头我就接，聊开了话很多，但没人起头时我先观望',
+    b2: '有人搭话就聊，没人搭就待在角落，不主动但也不难受',
+    b1: '先找个角落观察，有人来搭话就聊，没人来也行' },
   // Q2 S/N
   { dim: 'SN', q: '老板说"公司明年要上市"，你第一时间想的是：',
-    a: '算算自己能分多少期权，够不够还房贷',
-    b: '"上市之后文化会变吗？我们真的需要上市吗？"' },
+    a1: '"这饼能落到我兜里多少"',
+    a2: '会先想想这事跟我有没有关系，再决定要不要当真',
+    b2: '会琢磨这事对公司意味着什么，但也就琢磨到这儿',
+    b1: '"上市之后，公司还是原来那家公司吗"' },
   // Q3 T/F
   { dim: 'TF', q: '朋友哭着跟你说他被甩了，你开口第一句是：',
-    a: '"你们本来就不合适，我上次就想说了。"',
-    b: '"天呐，你还好吗？要不要我过来陪你？"' },
+    a1: '先帮他理清楚发生了什么，话说得直，但都是为他好',
+    a2: '先陪他待会儿，等他缓一缓，还是会忍不住帮他捋逻辑',
+    b2: '会先安慰他，偶尔没忍住冒出一句"其实早有苗头"——说完就后悔',
+    b1: '先接住他的情绪，道理等他缓过来再说' },
   // Q4 J/P
   { dim: 'JP', q: '你的手机相册长什么样：',
-    a: '按时间、地点、人物分好文件夹，连截图都归类',
-    b: '一千多张未整理，大部分是表情包和模糊的月亮' },
+    a1: '整理过，想找什么很快能找到',
+    a2: '平时乱着，心血来潮会大整理一次，大部分时候靠翻',
+    b2: '很少整理，偶尔实在受不了了才清一次',
+    b1: '基本没整理，翻起来像考古' },
   // Q5 E/I
   { dim: 'EI', q: '你发了一条朋友圈，一小时只有 3 个赞，你会：',
-    a: '重新编辑一下，换个时间再发，肯定是我没发好',
-    b: '无所谓，我发给自己看的，记录生活而已' },
+    a1: '会琢磨是不是内容不行，可能删了换个时间再发',
+    a2: '会有点在意，看看谁赞了谁没赞，但删是不会删的',
+    b2: '会看两眼，想想要不要回应一下，然后就没有然后了',
+    b1: '发完就忘了，本来也不是发给别人看的' },
   // Q6 S/N
   { dim: 'SN', q: '周末你睡到中午醒来，你第一反应是：',
-    a: '"完蛋，半天没了，今天计划全乱了。"',
-    b: '"这感觉真好，如果每天都能这样，我可能就不会这么累了。"' },
+    a1: '"半天没了，今天的安排全乱了"',
+    a2: '会赖一会儿床，然后赶紧把今天重新排一遍',
+    b2: '觉得挺舒服，但躺久了心里会有点空落落的',
+    b1: '"真舒服，要是每天都能这样就好了"' },
   // Q7 T/F
   { dim: 'TF', q: '你被同事当众甩锅，你当场会：',
-    a: '冷静地把聊天记录调出来，逐条打脸',
-    b: '气得说不出话，事后越想越气，深夜写小作文但没发' },
+    a1: '把事实摆出来，谁的锅就是谁的',
+    a2: '当场忍住了，但事后会找机会把话说清楚',
+    b2: '先咽下去，心里会记上一笔，但多半不会翻出来说',
+    b1: '先咽下去，回头越想越气，但多半不会当面吵' },
   // Q8 J/P
-  { dim: 'JP', q: '你手机里有多少个"待办事项"是超过两周没完成的：',
-    a: '零个，我每周日晚上必清一次',
-    b: '十几个吧，有一些去年就躺在那儿了' },
+  { dim: 'JP', q: '你手机里有多少"待办事项"是超过两周没完成的：',
+    a1: '基本不拖欠，会定期清一次',
+    a2: '大部分能按时做完，偶尔会有一两件拖到过期',
+    b2: '攒着攒着就忘了，等想起来已经过期了',
+    b1: '攒了一堆，想起来才清，有的早过期了' },
   // Q9 E/I
   { dim: 'EI', q: '部门群里发起周末 AA 聚餐接龙，你会：',
-    a: '第一个接龙，还顺手@了几个人："走啊走啊，人齐了才热闹"',
-    b: '先潜水看谁去，等中午没人注意的时候，默默在最后接上龙' },
+    a1: '看到就接，还会喊上相熟的人一起',
+    a2: '一般会接，但那天如果事多，会先等等再决定',
+    b2: '会先看看谁去，人熟就接，人太杂就犹豫',
+    b1: '先看看谁去，人差不多才决定，能不主动就不主动' },
   // Q10 S/N
   { dim: 'SN', q: '朋友问你"中了五百万，第一件事做什么"，你：',
-    a: '"先还房贷，剩下的存定期，再换台省油的车"',
-    b: '"辞职，环游世界，路上写一本书，书名我都想好了"' },
+    a1: '"先把日子过踏实了再说"',
+    a2: '会先想想怎么安排，但想来想去还是让日子更稳当',
+    b2: '会想想能拿它换点什么新活法，但也就是想想',
+    b1: '"先把自己从日子里放出来再说"' },
   // Q11 T/F
   { dim: 'TF', q: '对象吵架时说"你就是不爱我了"，你：',
-    a: '"我们从逻辑上理一下：吵架不等于不爱。你看，上周三我还……"',
-    b: '"你怎么能这么说！我前天晚上还给你带宵夜了！"，然后你先哭了' },
+    a1: '想把"不爱"这个结论拆开，看看到底成不成立',
+    a2: '会先愣一下，然后试着解释，说着说着就变成讲道理了',
+    b2: '会先难过，缓一会儿才能说清楚自己到底想说什么',
+    b1: '先被这句话伤到了，情绪上来，道理根本讲不进去' },
   // Q12 J/P
   { dim: 'JP', q: '去一个从没去过的城市出差两天，你：',
-    a: '机票酒店行程单提前一周发到自己手机里，连吃饭的馆子都订好了',
-    b: '在机场才查是哪个航站楼，酒店到了再找，走到哪算哪' },
+    a1: '提前把行程安排妥当，心里才踏实',
+    a2: '会订好住和行，剩下的到了再随机应变',
+    b2: '知道大概方向，但会先把机场到酒店的路查清楚',
+    b1: '知道大概方向就行，细节到了再说' },
   // Q13 E/I
   { dim: 'EI', q: '周六早上，三个朋友分别发消息约你出去，你：',
-    a: '全都答应，三场连轴转，晚上回家还要在群里复盘今天的每一场',
-    b: '挑最熟的一个，其余回复"下次"，然后偷偷松了口气' },
+    a1: '都想见，能串就串，热闹比累重要',
+    a2: '想见，但安排太满的话，会砍掉一两个',
+    b2: '最多见一波，见完有点累，剩下的说下次',
+    b1: '最多见一波，见完要缓缓，剩下的改天' },
   // Q14 S/N
   { dim: 'SN', q: '刷到"AI 三五年内取代四成岗位"的新闻，你心想：',
-    a: '"关我什么事，先看看我这行现在还招不招人"',
-    b: '"人一旦不用工作了，意义从哪来？工作真的存在过吗？"' },
-  // Q15 彩蛋①（不计分）
+    a1: '先关心这事会不会落到自己头上，能做什么准备',
+    a2: '会先看看自己这行风险大不大，顺便想想要不要学点新东西',
+    b2: '会想到工作、意义这些更大的问题，但想一会儿就停了',
+    b1: '先想这事背后更大的问题：工作、意义、人以后靠什么活着' },
+  // Q15 彩蛋①（不计分，二选一）
   { dim: null, q: '恭喜你，已经答完一半。本题不计分，纯属慰问：',
     a: '谢谢，我继续',
     b: '我才发现已经一半了？' },
   // Q16 T/F
-  { dim: 'TF', q: '最好的朋友升职了，但你知道这位朋友撑不太住这个位置，你：',
-    a: '"恭喜。但说句实话，这个位置你现在顶得住吗？"',
-    b: '"恭喜！！我就说你行！今晚必须庆祝！"，回家后想了一整晚"ta 真的行吗"' },
+  { dim: 'TF', q: '最好的朋友升职了，但你知道他撑不太住这个位置，你：',
+    a1: '恭喜之外，会找机会提醒他风险在哪',
+    a2: '会真心恭喜，然后找个合适的时机，委婉地提一句',
+    b2: '恭喜是真诚的，担心先放着，等他自己提再说',
+    b1: '恭喜是真心实意的，担心先放着，等需要再说' },
   // Q17 J/P
   { dim: 'JP', q: '你的周末通常是：',
-    a: '"上午打扫，下午健身，晚上看一部电影"，安排得明明白白',
-    b: '睡醒再说，一整天过去，只完成了"想今天干什么"' },
+    a1: '心里有谱，几点干什么大概有个安排',
+    a2: '会大概想想周末要做什么，但执行起来很随意',
+    b2: '随缘过，但一整天都躺着的话，会有点不安',
+    b1: '随缘过，能完整休息一天就很满意' },
   // Q18 E/I
   { dim: 'EI', q: '年会要你上台表演，你：',
-    a: '一口答应，还主动要求加戏，下班路上已经在排练了',
-    b: '拼命推掉，实在推不掉就答应，然后祈祷领导忘掉这件事' },
+    a1: '行啊，上就上，说不定挺好玩的',
+    a2: '会犹豫一下，但有人一起上的话，就上',
+    b2: '能推就推，推不掉也尽量挑个存在感低的活儿',
+    b1: '能推就推，推不掉就硬着头皮上' },
   // Q19 S/N
   { dim: 'SN', q: '朋友眉飞色舞讲他的创业项目，你第一反应：',
-    a: '"启动资金多少？回本周期多久？有没有竞品？"',
-    b: '"这个方向有意思，未来可以延伸到……"，你已经开始替他规划五年后的版图了' },
+    a1: '先问最实际的：钱从哪来、多久能回本',
+    a2: '会先听个大概，然后忍不住问一句"那钱从哪来"',
+    b2: '会被想法吸引，但一聊到落地细节就开始走神',
+    b1: '先被这个想法本身吸引，会顺着往下想很远' },
   // Q20 T/F
   { dim: 'TF', q: '电梯里遇到一个哭得停不下来的陌生人，你：',
-    a: '递上纸巾，先问"需要帮你叫车，还是报警？"，先解决问题',
-    b: '你鼻子先酸了。你还没开口，已经快和他一起哭了' },
+    a1: '会做点什么：递纸巾、问一句需不需要帮忙',
+    a2: '想帮忙，但大概只敢递个纸巾，或者眼神示意一下',
+    b2: '心里跟着难受，会偷偷看几眼，但始终没开口',
+    b1: '心里跟着难受，但大概率什么也没做，假装没事' },
   // Q21 J/P
   { dim: 'JP', q: '任务快截止了，你：',
-    a: '截止前三天已经做完，现在在等别人交齐，顺便检查格式',
-    b: '你刚意识到今天就是截止日，还剩两页没写，但先刷会儿手机再说' },
+    a1: '基本都提前完成，留出余地才安心',
+    a2: '大多提前或准时完成，偶尔也会踩线交',
+    b2: '会拖到快截止才动，但一般都能赶上',
+    b1: '常常踩线完成，最后时刻效率反而最高' },
   // Q22 E/I
   { dim: 'EI', q: '你旅游时发了个定位，你希望：',
-    a: '立刻有人评论"羡慕"，你每五分钟刷一次，评论少于十条会觉得白来了',
-    b: '发完就关手机，第二天才回评论，偶尔忘了自己发过' },
+    a1: '有人回应，回应多心情会好，会时不时看看',
+    a2: '会发，偶尔看看有没有人回应，没回应也不太在意',
+    b2: '发完会看两眼，但不会特意等谁回应',
+    b1: '发完就不太管了，回不回随缘' },
   // Q23 S/N
   { dim: 'SN', q: '看到"换季大促最后一天"的横幅，你：',
-    a: '赶紧把购物车里的东西下单，趁便宜',
-    b: '"我们真的需要这些吗？促销真的让我们更幸福了吗？"，最后什么都没买，但想了一晚上' },
+    a1: '有需要的就趁活动买，算下来确实划算',
+    a2: '正好有想买的东西时会等大促，但不会为凑单乱买',
+    b2: '会逛逛看看，纠结半天，最后可能什么都没买',
+    b1: '会纠结"是不是真需要"，经常加到购物车然后不了了之' },
   // Q24 T/F
   { dim: 'TF', q: '公司通知要裁员 10%，你：',
-    a: '开始更新简历、算赔偿金、盘点人脉，冷静得像在做年度预算',
-    b: '"我是不是平时哪里做得不好……"，先把责任揽到自己头上，emo 了三天' },
+    a1: '先想接下来怎么办：简历、赔偿、下一步',
+    a2: '会先算算自己在名单里的概率，再决定慌不慌',
+    b2: '会不安，但会先看看别人什么反应再说',
+    b1: '先消化情绪，会忍不住想是不是自己哪里不够好' },
   // Q25 J/P
   { dim: 'JP', q: '你要出门旅游一周，你的行李箱：',
-    a: '出发前三天就装好了，还贴了标签：衣物/药品/充电器，备了两套方案',
-    b: '出发前两小时才开始收拾，把整个衣柜倒进箱子，然后忘了带充电器' },
+    a1: '提前收拾好，列个清单，走之前基本不慌',
+    a2: '提前一天收拾，清单在心里，偶尔忘带小东西',
+    b2: '临走前才收拾，重要的东西一般不会忘，小东西随缘',
+    b1: '临走前才收拾，落下点东西是常态' },
   // Q26 E/I
   { dim: 'EI', q: '开会时领导突然说"大家随便聊聊，说错没关系"，你：',
-    a: '第一个开口，怕冷场，还负责把话题接下去',
-    b: '祈祷不要点到自己，被点名也只回一句"我没什么补充"' },
+    a1: '会主动说，冷场时还会帮忙把话接起来',
+    a2: '有想法会说出来，但冷场时一般不主动接',
+    b2: '被点到会说两句，没人点就安静待着',
+    b1: '能不开口就不开口，被点到也尽量简短' },
   // Q27 S/N
   { dim: 'SN', q: '你手机里最常用的备忘录，内容通常是：',
-    a: '"周三交水电费""周三 14:00 开会""给妈买药"',
-    b: '"深夜想到的一个点子""某句话的感悟""一个还没起头的故事"' },
+    a1: '记的都是待办：要交的、要买的、要做的',
+    a2: '待办和想法混着记，但待办会标得更清楚',
+    b2: '想法记得多，偶尔也记点待办，但经常忘了看',
+    b1: '记的都是想法：突然想到的、想记住的、还没成形的' },
   // Q28 T/F
   { dim: 'TF', q: '你刷到一个感人的公益广告，你：',
-    a: '心里有点触动，但马上切走："算了，忙着呢。"',
-    b: '看到一半就开始掉眼泪，还转发到家族群，配文"都看看吧"' },
+    a1: '会有点触动，但很快回到手头的事',
+    a2: '会触动一下，多看几秒，但该干嘛还是干嘛',
+    b2: '容易被带进去，鼻子会酸，但一般不会真哭出来',
+    b1: '容易看进去，眼泪比理智先到' },
   // Q29 J/P
   { dim: 'JP', q: '同事问"这周五下班一起去吃火锅？"，你：',
-    a: '"我这周计划是：周三前结掉手头项目，周五正好空出来，可以。"',
-    b: '"可以啊！周五见！"，你根本不知道周五原本有什么安排' },
-  // Q30 彩蛋②（不计分）
+    a1: '会先过一遍自己的安排，确认没冲突才答应',
+    a2: '会先想想那天有没有事，大概没冲突就答应',
+    b2: '一般先答应，真撞了再跟对方商量改时间',
+    b1: '先答应了再说，冲突了到时候再调' },
+  // Q30 彩蛋②（不计分，二选一）
   { dim: null, q: '本题不计分。你答到了最后，说明要么有耐心，要么好奇心太重，两者都没有药：',
     a: '来都来了',
     b: '你也没给我退出的按钮' }
@@ -1530,12 +1625,14 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
 <script>
 // ============================================================
 // 《你是什么东西》交互逻辑
-// 计分规则（03 文档）：每题 A=-1 / B=+1，每维 7 题，-7..+7
-// >0 判右极，<0 判左极；彩蛋题（dim=null）不计分
+// 计分规则（03 文档）：四档程度制
+//   A 完全是我 = -1 / 偏向 A = -0.5 / 偏向 B = +0.5 / B 完全是我 = +1
+//   每维 7 题，总分 -7..+7（0.5 步进）；总分 0 平局时按强档数仲裁，
+//   再平默认左极；彩蛋题（dim=null）二选一，不计分
 //
 // 模式（转化优化）：
 //   full    = 完整版 30 题（每维 7 题）
-//   quick   = 快测版 12 题（每维抽第 1/4/7 题，3 题为奇数，无平局）
+//   quick   = 快测版 12 题（每维抽第 1/4/7 题）
 //   upgrade = 快测完成后补 18 题升级完整档案（快测分保留累加）
 // 断点续答：localStorage 存进度，回访时封面显示"继续上次测试"
 // ============================================================
@@ -1555,6 +1652,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
   var MODE_FULL = 'full', MODE_QUICK = 'quick', MODE_UPGRADE = 'upgrade';
   var currentMode = MODE_FULL;
   // 快测每维抽 3 题：该维第 1/4/7 题（下标：EI:0,12,25 / SN:1,13,26 / TF:2,15,27 / JP:3,16,28）
+  // 四档制下 3 题也可能平局（如 -1 +0.5 +0.5 = 0），由 dimScore 仲裁
   var QUICK_PICKS = [0, 12, 25, 1, 13, 26, 2, 15, 27, 3, 16, 28];
   function questionList(mode) {
     if (mode === MODE_QUICK) {
@@ -1566,6 +1664,8 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     return QUESTIONS;
   }
 
+  // scores[dim] = { sum: 总分(-7..+7), strongA: 强档A数, strongB: 强档B数 }
+  // strong* 用于平局仲裁（tiebreaker），随答题累加、随进度持久化
   var scores = {};        // 每维得分
   var idx = 0;            // 当前题在 questionList 中的下标
   var myCode = null;      // 我的结果代码
@@ -1600,8 +1700,39 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     '正在通知你的动物来认领你…'
   ];
 
+  // 四档档位（与 data.js 的 a1/a2/b2/b1 对应）：程度词 + 计分 + 主/次档样式
+  var DEGREES = [
+    { deg: '① 完全是我', cls: 'full left',  val: -1, key: 'a1' },
+    { deg: '② 有点像我', cls: 'soft left',  val: -0.5, key: 'a2' },
+    { deg: '③ 有点像我', cls: 'soft right', val: 0.5, key: 'b2' },
+    { deg: '④ 完全是我', cls: 'full right', val: 1, key: 'b1' }
+  ];
+
   function initScores() {
-    DIMS.forEach(function (d) { scores[d] = 0; });
+    DIMS.forEach(function (d) { scores[d] = { sum: 0, strongA: 0, strongB: 0 }; });
+  }
+
+  // 兼容旧版进度（scores 曾为纯数字）：统一归一化为 {sum, strongA, strongB}
+  function normalizeScores(s) {
+    var out = {};
+    DIMS.forEach(function (d) {
+      var v = s && s[d];
+      if (typeof v === 'number') { out[d] = { sum: v, strongA: 0, strongB: 0 }; }
+      else if (v && typeof v.sum === 'number') { out[d] = v; }
+      else { out[d] = { sum: 0, strongA: 0, strongB: 0 }; }
+    });
+    return out;
+  }
+
+  // 维度最终得分（tiebreaker 仲裁，保证非 0、无平局）：
+  // 1) 总分非 0 → 直接采用
+  // 2) 总分 0 → 强档（完全是我）数多的一侧胜，以最小步进 0.5 记向
+  // 3) 强档数也相同 → 默认左极（E/S/T/J）
+  function dimScore(d) {
+    var s = scores[d] || { sum: 0, strongA: 0, strongB: 0 };
+    if (s.sum !== 0) { return s.sum; }
+    if (s.strongA !== s.strongB) { return s.strongA > s.strongB ? -0.5 : 0.5; }
+    return -0.5;
   }
 
   function showPage(id) {
@@ -1666,7 +1797,8 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     $('ct-q').textContent = q.q;
     var box = $('ct-opts');
     box.innerHTML = '';
-    [q.a, q.b].forEach(function (text, i) {
+    // 试读题展示两个锚点倾向（a1 = A 极完全档，b1 = B 极完全档）
+    [q.a1, q.b1].forEach(function (text, i) {
       var div = document.createElement('div');
       div.className = 'ct-opt';
       div.innerHTML = '<span class="ct-letter">' + (i === 0 ? 'A' : 'B') + '</span><span></span>';
@@ -1739,23 +1871,60 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
 
     var box = $('q-options');
     box.innerHTML = '';
-    [q.a, q.b].forEach(function (text, i) {
+
+    // 彩蛋题（dim=null）：保持二选一大按钮，不计分
+    if (!q.dim) {
+      var eggTip = document.createElement('p');
+      eggTip.className = 'q-egg-tip';
+      eggTip.textContent = '彩蛋题 · 不计分，随便选';
+      box.appendChild(eggTip);
+      [q.a, q.b].forEach(function (text, i) {
+        var btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = text;
+        btn.style.animationDelay = (140 + i * 90) + 'ms';
+        btn.addEventListener('click', function () { choose(0, btn); });
+        box.appendChild(btn);
+      });
+      return;
+    }
+
+    // 普通题：四档程度制，四个完整按钮竖排（①④ 主档实心 / ②③ 次档浅描边）
+    var hint = document.createElement('p');
+    hint.className = 'q-hint';
+    hint.textContent = '选「有点像我」说明你两边都沾——按直觉来，没有标准答案';
+    box.appendChild(hint);
+
+    var group = document.createElement('div');
+    group.className = 'q-degrees';
+    group.setAttribute('role', 'radiogroup');
+    DEGREES.forEach(function (item, i) {
       var btn = document.createElement('button');
-      btn.className = 'option';
-      btn.textContent = text;
-      btn.style.animationDelay = (120 + i * 90) + 'ms'; // slide-up stagger
-      btn.addEventListener('click', function () { choose(i, btn); });
-      box.appendChild(btn);
+      btn.className = 'option deg ' + item.cls;
+      btn.setAttribute('role', 'radio');
+      btn.innerHTML = '<span class="deg-label"></span><span class="deg-text"></span>';
+      btn.firstChild.textContent = item.deg;
+      btn.lastChild.textContent = q[item.key];
+      btn.style.animationDelay = (120 + i * 70) + 'ms';
+      btn.addEventListener('click', function () { choose(item.val, btn); });
+      group.appendChild(btn);
     });
+    box.appendChild(group);
   }
 
-  function choose(i, btn) {
+  function choose(value, btn) {
     var list = questionList(currentMode);
     var q = list[idx];
-    if (q.dim) { scores[q.dim] += (i === 0 ? -1 : 1); }
+    if (q.dim) {
+      var s = scores[q.dim];
+      s.sum += value;
+      if (value === -1) { s.strongA++; }
+      else if (value === 1) { s.strongB++; }
+    }
 
     btn.classList.add('selected');
-    $('q-options').querySelectorAll('.option').forEach(function (b) { b.disabled = true; });
+    var box = $('q-options');
+    box.querySelectorAll('.degree, .option').forEach(function (b) { b.disabled = true; });
 
     setTimeout(function () {
       idx++;
@@ -1790,7 +1959,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
   function computeCode() {
     var code = '';
     DIMS.forEach(function (d) {
-      code += scores[d] > 0 ? RIGHT_LABEL[d] : LEFT_LABEL[d];
+      code += dimScore(d) > 0 ? RIGHT_LABEL[d] : LEFT_LABEL[d];
     });
     return code;
   }
@@ -1813,14 +1982,16 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     var box = $('r-scales');
     box.innerHTML = '';
     DIMS.forEach(function (d) {
-      var s = scores[d];
+      var s = dimScore(d);
       var ratio = Math.abs(s) / 7;          // 偏向强度 0..1
       var width = Math.max(6, 50 * ratio);  // 最小可见宽度 6%
 
       var row = document.createElement('div');
       row.className = 'scale';
       row.innerHTML =
-        '<div class="scale-label"><span>' + LEFT_LABEL[d] + '</span><span>' + RIGHT_LABEL[d] + '</span></div>' +
+        '<div class="scale-label"><span>' + LEFT_LABEL[d] + '</span>' +
+          '<span class="scale-val">' + (s > 0 ? '+' : '') + s + '</span>' +
+          '<span>' + RIGHT_LABEL[d] + '</span></div>' +
         '<div class="scale-track">' +
           '<div class="scale-fill" style="left:' + (s > 0 ? '50%' : 'calc(50% - ' + width + '%)') + ';width:' + width + '%;"></div>' +
         '</div>';
@@ -1829,10 +2000,10 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
   }
 
   // 稀有度：按答题极端度计算（Social Currency：炫耀点）
-  // 满 7 分极端 = SSR，6 = SR，5 = R，其余 = N
+  // 四档制下：满 7 分（全强档同向）极端 = SSR，≥6 = SR，≥5 = R，其余 = N
   function rarityOf() {
     var max = 0;
-    DIMS.forEach(function (d) { max = Math.max(max, Math.abs(scores[d])); });
+    DIMS.forEach(function (d) { max = Math.max(max, Math.abs(dimScore(d))); });
     if (max === 7) { return 'SSR · 稀有物种'; }
     if (max >= 6) { return 'SR · 稀缺物种'; }
     if (max >= 5) { return 'R · 常见物种'; }
@@ -1985,7 +2156,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     if (!p) { renderResume(); return; }
     track('恢复进度');
     currentMode = p.mode;
-    scores = p.scores; // 恢复已得分数（快测分保留给补测累加）
+    scores = normalizeScores(p.scores); // 恢复已得分数（快测分保留给补测累加）
     if (p.done && p.mode === MODE_QUICK) {
       // 快测已完成 → 直接进入补测阶段
       currentMode = MODE_UPGRADE;
