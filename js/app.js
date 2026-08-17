@@ -1,11 +1,13 @@
 // ============================================================
 // 《你是什么东西》交互逻辑
-// 计分规则（03 文档）：每题 A=-1 / B=+1，每维 7 题，-7..+7
-// >0 判右极，<0 判左极；彩蛋题（dim=null）不计分
+// 计分规则（03 文档）：四档程度制
+//   A 完全是我 = -1 / 偏向 A = -0.5 / 偏向 B = +0.5 / B 完全是我 = +1
+//   每维 7 题，总分 -7..+7（0.5 步进）；总分 0 平局时按强档数仲裁，
+//   再平默认左极；彩蛋题（dim=null）二选一，不计分
 //
 // 模式（转化优化）：
 //   full    = 完整版 30 题（每维 7 题）
-//   quick   = 快测版 12 题（每维抽第 1/4/7 题，3 题为奇数，无平局）
+//   quick   = 快测版 12 题（每维抽第 1/4/7 题）
 //   upgrade = 快测完成后补 18 题升级完整档案（快测分保留累加）
 // 断点续答：localStorage 存进度，回访时封面显示"继续上次测试"
 // ============================================================
@@ -25,6 +27,7 @@
   var MODE_FULL = 'full', MODE_QUICK = 'quick', MODE_UPGRADE = 'upgrade';
   var currentMode = MODE_FULL;
   // 快测每维抽 3 题：该维第 1/4/7 题（下标：EI:0,12,25 / SN:1,13,26 / TF:2,15,27 / JP:3,16,28）
+  // 四档制下 3 题也可能平局（如 -1 +0.5 +0.5 = 0），由 dimScore 仲裁
   var QUICK_PICKS = [0, 12, 25, 1, 13, 26, 2, 15, 27, 3, 16, 28];
   function questionList(mode) {
     if (mode === MODE_QUICK) {
@@ -36,6 +39,8 @@
     return QUESTIONS;
   }
 
+  // scores[dim] = { sum: 总分(-7..+7), strongA: 强档A数, strongB: 强档B数 }
+  // strong* 用于平局仲裁（tiebreaker），随答题累加、随进度持久化
   var scores = {};        // 每维得分
   var idx = 0;            // 当前题在 questionList 中的下标
   var myCode = null;      // 我的结果代码
@@ -70,8 +75,39 @@
     '正在通知你的动物来认领你…'
   ];
 
+  // 四档档位（与 data.js 的 a1/a2/b2/b1 对应）：程度词 + 计分 + 主/次档样式
+  var DEGREES = [
+    { deg: '① 完全是我', cls: 'full left',  val: -1, key: 'a1' },
+    { deg: '② 有点像我', cls: 'soft left',  val: -0.5, key: 'a2' },
+    { deg: '③ 有点像我', cls: 'soft right', val: 0.5, key: 'b2' },
+    { deg: '④ 完全是我', cls: 'full right', val: 1, key: 'b1' }
+  ];
+
   function initScores() {
-    DIMS.forEach(function (d) { scores[d] = 0; });
+    DIMS.forEach(function (d) { scores[d] = { sum: 0, strongA: 0, strongB: 0 }; });
+  }
+
+  // 兼容旧版进度（scores 曾为纯数字）：统一归一化为 {sum, strongA, strongB}
+  function normalizeScores(s) {
+    var out = {};
+    DIMS.forEach(function (d) {
+      var v = s && s[d];
+      if (typeof v === 'number') { out[d] = { sum: v, strongA: 0, strongB: 0 }; }
+      else if (v && typeof v.sum === 'number') { out[d] = v; }
+      else { out[d] = { sum: 0, strongA: 0, strongB: 0 }; }
+    });
+    return out;
+  }
+
+  // 维度最终得分（tiebreaker 仲裁，保证非 0、无平局）：
+  // 1) 总分非 0 → 直接采用
+  // 2) 总分 0 → 强档（完全是我）数多的一侧胜，以最小步进 0.5 记向
+  // 3) 强档数也相同 → 默认左极（E/S/T/J）
+  function dimScore(d) {
+    var s = scores[d] || { sum: 0, strongA: 0, strongB: 0 };
+    if (s.sum !== 0) { return s.sum; }
+    if (s.strongA !== s.strongB) { return s.strongA > s.strongB ? -0.5 : 0.5; }
+    return -0.5;
   }
 
   function showPage(id) {
@@ -136,7 +172,8 @@
     $('ct-q').textContent = q.q;
     var box = $('ct-opts');
     box.innerHTML = '';
-    [q.a, q.b].forEach(function (text, i) {
+    // 试读题展示两个锚点倾向（a1 = A 极完全档，b1 = B 极完全档）
+    [q.a1, q.b1].forEach(function (text, i) {
       var div = document.createElement('div');
       div.className = 'ct-opt';
       div.innerHTML = '<span class="ct-letter">' + (i === 0 ? 'A' : 'B') + '</span><span></span>';
@@ -209,23 +246,60 @@
 
     var box = $('q-options');
     box.innerHTML = '';
-    [q.a, q.b].forEach(function (text, i) {
+
+    // 彩蛋题（dim=null）：保持二选一大按钮，不计分
+    if (!q.dim) {
+      var eggTip = document.createElement('p');
+      eggTip.className = 'q-egg-tip';
+      eggTip.textContent = '彩蛋题 · 不计分，随便选';
+      box.appendChild(eggTip);
+      [q.a, q.b].forEach(function (text, i) {
+        var btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = text;
+        btn.style.animationDelay = (140 + i * 90) + 'ms';
+        btn.addEventListener('click', function () { choose(0, btn); });
+        box.appendChild(btn);
+      });
+      return;
+    }
+
+    // 普通题：四档程度制，四个完整按钮竖排（①④ 主档实心 / ②③ 次档浅描边）
+    var hint = document.createElement('p');
+    hint.className = 'q-hint';
+    hint.textContent = '选「有点像我」说明你两边都沾——按直觉来，没有标准答案';
+    box.appendChild(hint);
+
+    var group = document.createElement('div');
+    group.className = 'q-degrees';
+    group.setAttribute('role', 'radiogroup');
+    DEGREES.forEach(function (item, i) {
       var btn = document.createElement('button');
-      btn.className = 'option';
-      btn.textContent = text;
-      btn.style.animationDelay = (120 + i * 90) + 'ms'; // slide-up stagger
-      btn.addEventListener('click', function () { choose(i, btn); });
-      box.appendChild(btn);
+      btn.className = 'option deg ' + item.cls;
+      btn.setAttribute('role', 'radio');
+      btn.innerHTML = '<span class="deg-label"></span><span class="deg-text"></span>';
+      btn.firstChild.textContent = item.deg;
+      btn.lastChild.textContent = q[item.key];
+      btn.style.animationDelay = (120 + i * 70) + 'ms';
+      btn.addEventListener('click', function () { choose(item.val, btn); });
+      group.appendChild(btn);
     });
+    box.appendChild(group);
   }
 
-  function choose(i, btn) {
+  function choose(value, btn) {
     var list = questionList(currentMode);
     var q = list[idx];
-    if (q.dim) { scores[q.dim] += (i === 0 ? -1 : 1); }
+    if (q.dim) {
+      var s = scores[q.dim];
+      s.sum += value;
+      if (value === -1) { s.strongA++; }
+      else if (value === 1) { s.strongB++; }
+    }
 
     btn.classList.add('selected');
-    $('q-options').querySelectorAll('.option').forEach(function (b) { b.disabled = true; });
+    var box = $('q-options');
+    box.querySelectorAll('.degree, .option').forEach(function (b) { b.disabled = true; });
 
     setTimeout(function () {
       idx++;
@@ -260,7 +334,7 @@
   function computeCode() {
     var code = '';
     DIMS.forEach(function (d) {
-      code += scores[d] > 0 ? RIGHT_LABEL[d] : LEFT_LABEL[d];
+      code += dimScore(d) > 0 ? RIGHT_LABEL[d] : LEFT_LABEL[d];
     });
     return code;
   }
@@ -283,14 +357,16 @@
     var box = $('r-scales');
     box.innerHTML = '';
     DIMS.forEach(function (d) {
-      var s = scores[d];
+      var s = dimScore(d);
       var ratio = Math.abs(s) / 7;          // 偏向强度 0..1
       var width = Math.max(6, 50 * ratio);  // 最小可见宽度 6%
 
       var row = document.createElement('div');
       row.className = 'scale';
       row.innerHTML =
-        '<div class="scale-label"><span>' + LEFT_LABEL[d] + '</span><span>' + RIGHT_LABEL[d] + '</span></div>' +
+        '<div class="scale-label"><span>' + LEFT_LABEL[d] + '</span>' +
+          '<span class="scale-val">' + (s > 0 ? '+' : '') + s + '</span>' +
+          '<span>' + RIGHT_LABEL[d] + '</span></div>' +
         '<div class="scale-track">' +
           '<div class="scale-fill" style="left:' + (s > 0 ? '50%' : 'calc(50% - ' + width + '%)') + ';width:' + width + '%;"></div>' +
         '</div>';
@@ -299,10 +375,10 @@
   }
 
   // 稀有度：按答题极端度计算（Social Currency：炫耀点）
-  // 满 7 分极端 = SSR，6 = SR，5 = R，其余 = N
+  // 四档制下：满 7 分（全强档同向）极端 = SSR，≥6 = SR，≥5 = R，其余 = N
   function rarityOf() {
     var max = 0;
-    DIMS.forEach(function (d) { max = Math.max(max, Math.abs(scores[d])); });
+    DIMS.forEach(function (d) { max = Math.max(max, Math.abs(dimScore(d))); });
     if (max === 7) { return 'SSR · 稀有物种'; }
     if (max >= 6) { return 'SR · 稀缺物种'; }
     if (max >= 5) { return 'R · 常见物种'; }
@@ -455,7 +531,7 @@
     if (!p) { renderResume(); return; }
     track('恢复进度');
     currentMode = p.mode;
-    scores = p.scores; // 恢复已得分数（快测分保留给补测累加）
+    scores = normalizeScores(p.scores); // 恢复已得分数（快测分保留给补测累加）
     if (p.done && p.mode === MODE_QUICK) {
       // 快测已完成 → 直接进入补测阶段
       currentMode = MODE_UPGRADE;
