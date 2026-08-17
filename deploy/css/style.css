@@ -669,6 +669,188 @@ body {
   box-shadow: 0 2px 6px rgba(192, 57, 43, .4);
 }
 
+/* ---------- 分享卡片（截图源：屏幕外渲染的居中卡片） ---------- */
+#share-card {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 750px;
+  height: 1000px;
+  padding: 28px;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  z-index: -1;
+}
+/* 白底画布上的"居中圆角档案卡" */
+.sc-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  /* 注意：不能用 box-shadow——html2canvas 1.4.1 会把阴影渲染成覆盖整个卡片的灰影 */
+}
+.sc-hero {
+  position: relative;
+  height: 372px;
+  background: linear-gradient(160deg, #1E2B4E 0%, #2E2A5E 55%, #3B2E63 100%);
+  text-align: center;
+  overflow: hidden;
+}
+.sc-hero::before {
+  content: '';
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 129, 196, .4), transparent 70%);
+  top: -90px;
+  right: -60px;
+  pointer-events: none;
+  z-index: 0;
+}
+.sc-hero > * { position: relative; z-index: 1; }
+.sc-hero .stamp {
+  width: 76px;
+  height: 76px;
+  font-size: 18px;
+  letter-spacing: 3px;
+  border-width: 3px;
+  border-color: #E8716A;
+  color: #E8716A;
+  top: 26px;
+  right: 26px;
+}
+.sc-hero .stamp::before { inset: 5px; }
+.sc-brand {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 26px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, .55);
+  letter-spacing: 4px;
+}
+/* hero 内容绝对定位（不参与流式布局）：html2canvas 渲染稳定，快测版无徽章也不留空位 */
+.sc-icon {
+  position: absolute;
+  left: 50%;
+  margin-left: -70px;
+  top: 58px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, .28), rgba(255, 255, 255, .04) 58%),
+    linear-gradient(150deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .06));
+  border: 1px solid rgba(255, 255, 255, .32);
+  line-height: 140px;
+  text-align: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .25),
+    0 12px 32px rgba(0, 0, 0, .35);
+}
+.sc-icon .type-icon { width: 100px; height: 100px; vertical-align: middle; }
+.sc-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 214px;
+  font-family: 'WADisplay', 'Source Han Serif SC', 'Noto Serif SC', 'SimSun', 'STSong', serif;
+  font-size: 46px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  line-height: 1.3;
+  color: #fff;
+}
+.sc-animal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 286px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, .55);
+  letter-spacing: 2px;
+}
+/* 卡片内稀有度徽章：静态展示（关闭入场动画，截图不受动画中间态影响；
+   不用 box-shadow——html2canvas 1.4.1 会把阴影渲染成盖住文字的灰影） */
+#share-card .rarity-badge {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 324px;
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 4px;
+  animation: none;
+  box-shadow: none;
+  white-space: nowrap;
+}
+.sc-body {
+  position: relative;
+  height: 572px;
+  box-sizing: border-box;
+}
+/* 内容绝对定位：html2canvas 1.4.1 对 absolute 定位支持最稳，且不依赖内容流式布局 */
+.sc-quote-wrap {
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  top: 52px;
+  text-align: center;
+}
+.sc-quote-label {
+  font-size: 13px;
+  color: #C0C4CC;
+  letter-spacing: 6px;
+}
+.sc-quote {
+  margin-top: 16px;
+  font-family: 'STSong', 'SimSun', 'Songti SC', serif;
+  font-size: 22px;
+  line-height: 1.9;
+  color: #2B2F36;
+  text-align: center;
+  letter-spacing: 1px;
+}
+.sc-qr-box {
+  position: absolute;
+  left: 50%;
+  margin-left: -63px;
+  top: 300px;
+  width: 126px;
+  height: 126px;
+  padding: 7px;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  background: #fff;
+  text-align: center;
+  box-sizing: border-box;
+}
+.sc-qr-box canvas, .sc-qr-box img { width: 112px; height: 112px; display: block; }
+.sc-cta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 444px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #2B2F36;
+  text-align: center;
+}
+.sc-powered {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 486px;
+  font-size: 12px;
+  color: #9CA3AF;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
 /* ---------- 长图遮罩 ---------- */
 #overlay {
   position: fixed;

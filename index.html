@@ -132,10 +132,10 @@ var _hmt = _hmt || [];
     </div>
     <button id="btn-back-mine" class="btn-ghost hidden">← 返回我的结果</button>
     <button id="btn-upgrade" class="btn-main btn-upgrade hidden">再答 18 题，升级完整档案 →</button>
-    <button id="btn-capture" class="btn-main">生成分享长图</button>
+    <button id="btn-capture" class="btn-main">生成分享卡片</button>
     <button id="btn-gallery" class="btn-ghost">查看其他 15 种人格</button>
     <button id="btn-restart" class="btn-ghost">重新测试</button>
-    <p class="result-tip">长图可发朋友圈 / 小红书，手机长按即可保存</p>
+    <p class="result-tip">卡片可发朋友圈 / 小红书，手机长按即可保存</p>
   </div>
 </section>
 
@@ -151,7 +151,30 @@ var _hmt = _hmt || [];
   </div>
 </section>
 
-<!-- 长图预览遮罩 -->
+<!-- 分享卡片（屏幕外渲染，仅作为截图源：居中卡片式分享图，不占页面） -->
+<div id="share-card" aria-hidden="true">
+  <div class="sc-card">
+    <div class="sc-hero">
+      <p class="sc-brand">《你是什么东西》 · 非官方人格备案</p>
+      <span class="stamp">非正式</span>
+      <div class="sc-icon"><img id="sc-icon" class="type-icon" alt=""></div>
+      <div id="sc-name" class="sc-name"></div>
+      <div id="sc-animal" class="sc-animal"></div>
+      <div id="sc-rarity" class="rarity-badge hidden"></div>
+    </div>
+    <div class="sc-body">
+      <div class="sc-quote-wrap">
+        <p class="sc-quote-label">地狱判决 · 节选</p>
+        <p id="sc-quote" class="sc-quote"></p>
+      </div>
+      <div id="sc-qr" class="sc-qr-box"></div>
+      <p class="sc-cta">扫码测测你是什么东西</p>
+      <p class="sc-powered">由《你是什么东西》非官方生成 · 测完别删，留着自己哭</p>
+    </div>
+  </div>
+</div>
+
+<!-- 分享卡片预览遮罩 -->
 <div id="overlay" class="hidden">
   <div class="overlay-inner">
     <img id="captured-img" alt="你的非官方人格备案">

@@ -495,7 +495,38 @@
     showResult(true);
   });
 
-  // 生成分享长图（等标题字体加载完再截，避免截到 fallback 字体）
+  // 渲染分享卡片（截图源）：居中卡片式分享图
+  // 内容 = 印章 + 动物大图 + 人格名 + 稀有度 + 地狱判决首句 + 二维码
+  function renderShareCard() {
+    var t = TYPES[viewingCode];
+    setIcon($('sc-icon'), viewingCode);
+    $('sc-name').textContent = t.name;
+    $('sc-animal').textContent = '官方认证动物：' + t.animal;
+    // 稀有度仅"我的结果"完整版显示（快测版无极端度，显示会失真）
+    var rarity = $('sc-rarity');
+    var showRarity = viewingCode === myCode && currentMode !== MODE_QUICK;
+    rarity.classList.toggle('hidden', !showRarity);
+    if (showRarity) { rarity.textContent = rarityOf(); }
+    // 地狱判决取第一句（开篇句通常最狠，也保证卡片内放得下）
+    var first = t.judgment.split('。')[0];
+    $('sc-quote').textContent = first + '。';
+    // 二维码：带 ?src=qr 参数统计扫码回流（canvas 承载，html2canvas 对 canvas 渲染正常）
+    var qr = $('sc-qr');
+    qr.innerHTML = '';
+    if (window.QRCode) {
+      new QRCode(qr, { text: qrUrl(), width: 112, height: 112, colorDark: '#2B2F36' });
+    }
+  }
+
+  // 等卡片内的动物图标真正加载完再截图（避免截到空白；加载失败也继续，不阻塞）
+  function waitIconLoaded(done) {
+    var img = $('sc-icon');
+    if (img.complete) { done(); return; }
+    img.onload = function () { done(); };
+    img.onerror = function () { done(); };
+  }
+
+  // 生成分享卡片（等标题字体加载完再截，避免截到 fallback 字体）
   $('btn-capture').addEventListener('click', function () {
     if (!window.html2canvas) {
       alert('图片库加载失败，请检查网络后重试');
@@ -504,9 +535,13 @@
     var btn = this;
     btn.disabled = true;
     btn.textContent = '正在盖章…';
+    renderShareCard(); // 先填充卡片内容（含二维码）
     var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
     fontsReady.then(function () {
-      return html2canvas($('result-card'), { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' });
+      return new Promise(function (resolve) { waitIconLoaded(resolve); });
+    }).then(function () {
+      // 白底画布 + 屏幕外渲染的居中圆角卡片
+      return html2canvas($('share-card'), { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' });
     }).then(function (canvas) {
       track('保存长图');
       var img = $('captured-img');
@@ -523,10 +558,10 @@
       }
       $('overlay').classList.remove('hidden');
       btn.disabled = false;
-      btn.textContent = '生成分享长图';
+      btn.textContent = '生成分享卡片';
     }).catch(function () {
       btn.disabled = false;
-      btn.textContent = '生成分享长图';
+      btn.textContent = '生成分享卡片';
     });
   });
 
