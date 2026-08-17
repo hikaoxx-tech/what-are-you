@@ -60,7 +60,7 @@
 <section id="page-loading" class="page hidden">
   <div class="loading">
     <div class="spinner"></div>
-    <p>正在分析你的灵魂…</p>
+    <p id="loading-main">正在分析你的灵魂…</p>
     <p class="loading-sub">请稍候，你的物种档案正在归档</p>
   </div>
 </section>
@@ -74,6 +74,7 @@
       <div class="hero-icon"><img id="r-icon" class="type-icon" alt=""></div>
       <div id="r-name" class="type-name"></div>
       <div id="r-animal" class="type-animal"></div>
+      <div id="r-rarity" class="rarity-badge hidden"></div>
     </div>
     <div id="r-scales" class="scales"></div>
     <div class="block">
@@ -93,10 +94,15 @@
       <p id="r-file"></p>
     </div>
     <div class="easter" id="r-easter"></div>
+    <div class="block">
+      <h3><span class="sec-num">05</span>日常触发</h3>
+      <p id="r-trigger"></p>
+    </div>
     <div class="card-foot">
       <span class="foot-tag">测完别删，留着自己哭</span>
       <div id="qrcode" class="qrcode-box"></div>
     </div>
+    <p class="card-powered">由《你是什么东西》非官方生成 · 扫码测测你是什么东西</p>
   </div>
 
   <div class="result-actions">
@@ -105,6 +111,11 @@
       <p class="sc-text" id="sc-text"></p>
       <button id="btn-copy" class="btn-ghost sc-btn">复制挑战文案</button>
       <p class="sc-tip" id="sc-tip"></p>
+    </div>
+    <div class="give-panel" id="give-panel">
+      <p class="sc-title">这张档案适合发给</p>
+      <p class="give-text" id="give-text"></p>
+      <button id="btn-give" class="btn-ghost sc-btn">复制并发给 TA</button>
     </div>
     <button id="btn-back-mine" class="btn-ghost hidden">← 返回我的结果</button>
     <button id="btn-capture" class="btn-main">生成分享长图</button>
