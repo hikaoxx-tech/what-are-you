@@ -598,6 +598,15 @@ body {
 }
 
 </style>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?2180e790dc8804d1a5d74d917a452464";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 </head>
 <body>
 
@@ -1161,6 +1170,16 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
   function shareUrl() {
     return location.hostname === 'hikaoxx-tech.github.io' ? location.href : SHARE_URL;
   }
+  // ---------- 百度统计 ----------
+  // hm.js 加载后自动上报 PV；这里统一埋自定义事件，用于"事件分析"看转发意图
+  function track(action) {
+    try {
+      if (window._hmt && window._hmt.push) {
+        window._hmt.push(['_trackEvent', '人格测试', action]);
+      }
+    } catch (e) {}
+  }
+
   var TEASER_IDX = [2, 9, 10]; // 封面试读题：Q3 / Q10 / Q11
   var teaserPos = 0;
   var LOADING_LINES = [
@@ -1268,6 +1287,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
         showPage('page-loading');
         $('loading-main').textContent =
           LOADING_LINES[Math.floor(Math.random() * LOADING_LINES.length)];
+        track('完成测试');
         setTimeout(function () { showResult(true); }, 1500); // 1.5s 仪式感
       }
     }, 260);
@@ -1283,11 +1303,17 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     return code;
   }
 
+  // 二维码带 ?src=qr 参数：扫码进入的访客可单独统计（转发代理指标之一）
+  function qrUrl() {
+    var u = shareUrl();
+    return u + (u.indexOf('?') >= 0 ? '&' : '?') + 'src=qr';
+  }
+
   function makeQR() {
     var qr = $('qrcode');
     qr.innerHTML = '';
     if (window.QRCode) {
-      new QRCode(qr, { text: shareUrl(), width: 84, height: 84, colorDark: '#2B2F36' });
+      new QRCode(qr, { text: qrUrl(), width: 84, height: 84, colorDark: '#2B2F36' });
     }
   }
 
@@ -1463,6 +1489,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     btn.textContent = '正在盖章…';
     html2canvas($('result-card'), { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' })
       .then(function (canvas) {
+        track('保存长图');
         var img = $('captured-img');
         img.src = canvas.toDataURL('image/png');
         $('btn-download').href = img.src;
@@ -1503,6 +1530,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
 
   // 复制挑战文案（微信里贴给朋友）
   $('btn-copy').addEventListener('click', function () {
+    track('复制转发文案');
     var text = $('sc-text').textContent;
     var btn = this;
     copyToClipboard(text, function (ok) {
@@ -1513,6 +1541,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
 
   // 复制"这张档案适合发给"的转发文案
   $('btn-give').addEventListener('click', function () {
+    track('复制发给TA');
     var t = TYPES[viewingCode];
     var btn = this;
     copyToClipboard(
@@ -1527,6 +1556,8 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
   // ---------- 初始化 ----------
 
   initScores();
+  // 扫码进入：二维码带 ?src=qr 参数，统计二维码渠道访客
+  if (location.search.indexOf('src=qr') >= 0) { track('扫码进入'); }
   $('sc-tip').textContent = IS_WECHAT
     ? '点右上角 ··· 转发给朋友，让 TA 也测一下'
     : '把上方文案发给朋友，或在微信里打开本页后转发';
