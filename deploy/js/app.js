@@ -552,9 +552,11 @@
       if (IS_WECHAT) {
         $('btn-download').classList.add('hidden');
         $('save-hint').classList.remove('hidden');
+        $('overlay-actions').classList.add('single'); // 单按钮态：「关闭」居中显示
       } else {
         $('btn-download').classList.remove('hidden');
         $('save-hint').classList.add('hidden');
+        $('overlay-actions').classList.remove('single');
       }
       $('overlay').classList.remove('hidden');
       btn.disabled = false;

@@ -711,7 +711,14 @@ body {
   z-index: 0;
 }
 .sc-hero > * { position: relative; z-index: 1; }
+/* 印章文字用 line-height 居中：基础 .stamp 的 flex 居中 html2canvas 1.4.1 渲染不准，文字会被挤到左上角显示不全 */
+/* 位置用显式 left（hero 宽 694px：694-76-26=592）：html2canvas 1.4.1 对"只设 right 不设 left"的
+   绝对定位元素会放错位置（渲染到左上角静态位，被卡片圆角裁掉）——.sc-brand 因同时设 left/right 而正常 */
 .sc-hero .stamp {
+  display: block;
+  text-align: center;
+  line-height: 70px; /* 76px 圆 - 3px*2 边框 = 内容区高度，文字垂直居中 */
+  white-space: nowrap;
   width: 76px;
   height: 76px;
   font-size: 18px;
@@ -720,7 +727,8 @@ body {
   border-color: #E8716A;
   color: #E8716A;
   top: 26px;
-  right: 26px;
+  left: 592px;
+  right: auto;
 }
 .sc-hero .stamp::before { inset: 5px; }
 .sc-brand {
@@ -745,13 +753,20 @@ body {
     radial-gradient(circle at 32% 26%, rgba(255, 255, 255, .28), rgba(255, 255, 255, .04) 58%),
     linear-gradient(150deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .06));
   border: 1px solid rgba(255, 255, 255, .32);
-  line-height: 140px;
-  text-align: center;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, .25),
     0 12px 32px rgba(0, 0, 0, .35);
 }
-.sc-icon .type-icon { width: 100px; height: 100px; vertical-align: middle; }
+/* 图标用绝对定位居中：html2canvas 1.4.1 对 vertical-align: middle 渲染不准，图标会偏移出圆圈 */
+.sc-icon .type-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
+}
 .sc-name {
   position: absolute;
   left: 0;
@@ -906,6 +921,17 @@ body {
 .overlay-actions .btn-main, .overlay-actions .btn-ghost { margin: 0; flex: 1; }
 /* 保存按钮加大加宽，遮罩内主操作位 */
 .overlay-actions .btn-download-lg { flex: 1.5; padding: 16px 0; font-size: 18px; letter-spacing: 6px; }
+/* 微信内无下载按钮时：仅剩「关闭」一个按钮，改为居中固定宽度（不再被 flex:1 拉成通栏） */
+.overlay-actions.single { justify-content: center; }
+.overlay-actions.single .btn-ghost {
+  flex: none;
+  width: auto;
+  max-width: none;
+  min-width: 200px;
+  padding: 14px 0;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
 
 /* ---------- 通用 ---------- */
 @keyframes fadeIn {
