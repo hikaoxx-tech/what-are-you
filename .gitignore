@@ -1,0 +1,10 @@
+# 根目录冗余副本（与 js/app.js 完全相同）
+/app.js
+
+# 打包备份，不进版本库
+/人格测试.rar
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>你是什么东西 — 非官方人格备案</title>
+<meta property="og:title" content="你是什么东西">
+<meta property="og:description" content="测完别删，留着自己哭。30 道二选一，测出你的地狱人格代号。">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 封面页 -->
+<section id="page-start" class="page page-start">
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+  <div class="cover-card">
+    <div class="stamp">非正式</div>
+    <p class="cover-kicker">《你是什么东西》</p>
+    <h1 class="cover-title">非官方<br>人格备案</h1>
+    <p class="cover-subtitle">测完别删，留着自己哭</p>
+    <p class="cover-meta">30 道二选一 · 4 个维度 · 16 种人格代号 · 约 15 分钟</p>
+    <button id="btn-start" class="btn-main btn-cover">开始测试</button>
+    <p class="cover-warn">全部题目没有正确答案，只有错误答案。<br>本测试结果不具有任何科学依据，请放心相信。</p>
+  </div>
+  <p class="cover-foot">阅后即焚（并没有）</p>
+</section>
+
+<!-- 答题页 -->
+<section id="page-quiz" class="page hidden">
+  <div class="quiz-head">
+    <span id="q-count" class="q-count">第 1 / 30 题</span>
+    <div class="bar"><div id="q-bar" class="bar-fill"></div></div>
+  </div>
+  <div class="quiz-body">
+    <h2 id="q-title" class="q-title"></h2>
+    <div id="q-options"></div>
+  </div>
+</section>
+
+<!-- 分析中 -->
+<section id="page-loading" class="page hidden">
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>正在分析你的灵魂…</p>
+    <p class="loading-sub">请稍候，你的物种档案正在归档</p>
+  </div>
+</section>
+
+<!-- 结果页 -->
+<section id="page-result" class="page hidden">
+  <div id="result-card">
+    <div class="result-hero">
+      <div class="stamp">非正式</div>
+      <p class="card-head">《你是什么东西》 · 非官方人格备案</p>
+      <div class="hero-icon"><img id="r-icon" class="type-icon" alt=""></div>
+      <div id="r-name" class="type-name"></div>
+      <div id="r-animal" class="type-animal"></div>
+    </div>
+    <div id="r-scales" class="scales"></div>
+    <div class="block">
+      <h3><span class="sec-num">01</span>核心矛盾</h3>
+      <p id="r-conflict"></p>
+    </div>
+    <div class="block">
+      <h3><span class="sec-num">02</span>地狱判决</h3>
+      <p id="r-judgment"></p>
+    </div>
+    <div class="block">
+      <h3><span class="sec-num">03</span>处方 <span class="h3-sub">（建议无效，但请收好）</span></h3>
+      <ol id="r-prescription"></ol>
+    </div>
+    <div class="block">
+      <h3><span class="sec-num">04</span>物种档案 · 观察员批注</h3>
+      <p id="r-file"></p>
+    </div>
+    <div class="easter" id="r-easter"></div>
+    <div class="card-foot">
+      <span class="foot-tag">测完别删，留着自己哭</span>
+      <div id="qrcode" class="qrcode-box"></div>
+    </div>
+  </div>
+
+  <div class="result-actions">
+    <button id="btn-back-mine" class="btn-ghost hidden">← 返回我的结果</button>
+    <button id="btn-capture" class="btn-main">生成分享长图</button>
+    <button id="btn-gallery" class="btn-ghost">查看其他 15 种人格</button>
+    <button id="btn-restart" class="btn-ghost">重新测试</button>
+    <p class="result-tip">长图可发朋友圈 / 小红书，手机长按即可保存</p>
+  </div>
+</section>
+
+<!-- 全部人格页 -->
+<section id="page-gallery" class="page hidden">
+  <div class="gallery-head">
+    <h2>全部 16 种人格</h2>
+    <p class="gallery-sub">看看其他东西都是什么货色</p>
+  </div>
+  <div id="gallery-grid" class="gallery-grid"></div>
+  <div class="result-actions">
+    <button id="btn-gallery-back" class="btn-ghost">返回我的结果</button>
+  </div>
+</section>
+
+<!-- 长图预览遮罩 -->
+<div id="overlay" class="hidden">
+  <div class="overlay-inner">
+    <img id="captured-img" alt="你的非官方人格备案">
+    <div class="overlay-actions">
+      <a id="btn-download" class="btn-main" download="你是什么东西.png">保存图片</a>
+      <button id="btn-close" class="btn-ghost">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
