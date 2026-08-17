@@ -3,9 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>你是什么东西 — 非官方人格备案</title>
-<meta property="og:title" content="你是什么东西">
-<meta property="og:description" content="测完别删，留着自己哭。30 道二选一，测出你的地狱人格代号。">
+<title>你是什么东西 · 非官方人格备案</title>
+<meta name="description" content="30 道二选一，几分钟出结果。测出你的地狱人格代号——测完别删，留着自己哭。">
+<meta name="theme-color" content="#131C33">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="你是什么东西">
+<meta property="og:title" content="你是什么东西 · 非官方人格备案">
+<meta property="og:description" content="30 道二选一，几分钟出结果。测出你的地狱人格代号——测完别删，留着自己哭。">
+<meta property="og:image" content="https://hikaoxx-tech.github.io/what-are-you/assets/share-card.png">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="800">
+<meta property="og:url" content="https://hikaoxx-tech.github.io/what-are-you/">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,12 +24,22 @@
   <div class="bg-glow glow-2"></div>
   <div class="cover-card">
     <div class="stamp">非正式</div>
-    <p class="cover-kicker">《你是什么东西》</p>
-    <h1 class="cover-title">非官方<br>人格备案</h1>
+    <p class="cover-kicker">非官方人格备案 · 档案编号 No.2025-001</p>
+    <h1 class="cover-title">你是什么<br>东西？</h1>
     <p class="cover-subtitle">测完别删，留着自己哭</p>
-    <p class="cover-meta">30 道二选一 · 4 个维度 · 16 种人格代号 · 约 15 分钟</p>
+    <p class="cover-meta">30 道二选一 · 16 种地狱人格 · 约 3 分钟</p>
+    <div class="cover-teaser" id="cover-teaser">
+      <p class="ct-label">档案试读 · 第 <span id="ct-num"></span> 题</p>
+      <p class="ct-q" id="ct-q"></p>
+      <div class="ct-opts" id="ct-opts"></div>
+    </div>
     <button id="btn-start" class="btn-main btn-cover">开始测试</button>
+    <p class="cover-file" id="cover-file">16 种人格待归档 · 本机已归档 0 份</p>
     <p class="cover-warn">全部题目没有正确答案，只有错误答案。<br>本测试结果不具有任何科学依据，请放心相信。</p>
+  </div>
+  <div class="cover-animals">
+    <div class="ca-icons" id="ca-icons"></div>
+    <p class="ca-label">16 个物种档案已就位</p>
   </div>
   <p class="cover-foot">阅后即焚（并没有）</p>
 </section>
@@ -82,6 +100,12 @@
   </div>
 
   <div class="result-actions">
+    <div class="share-challenge hidden" id="share-challenge">
+      <p class="sc-title">转发挑战</p>
+      <p class="sc-text" id="sc-text"></p>
+      <button id="btn-copy" class="btn-ghost sc-btn">复制挑战文案</button>
+      <p class="sc-tip" id="sc-tip"></p>
+    </div>
     <button id="btn-back-mine" class="btn-ghost hidden">← 返回我的结果</button>
     <button id="btn-capture" class="btn-main">生成分享长图</button>
     <button id="btn-gallery" class="btn-ghost">查看其他 15 种人格</button>

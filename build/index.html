@@ -3,9 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>你是什么东西 — 非官方人格备案</title>
-<meta property="og:title" content="你是什么东西">
-<meta property="og:description" content="测完别删，留着自己哭。30 道二选一，测出你的地狱人格代号。">
+<title>你是什么东西 · 非官方人格备案</title>
+<meta name="description" content="30 道二选一，几分钟出结果。测出你的地狱人格代号——测完别删，留着自己哭。">
+<meta name="theme-color" content="#131C33">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="你是什么东西">
+<meta property="og:title" content="你是什么东西 · 非官方人格备案">
+<meta property="og:description" content="30 道二选一，几分钟出结果。测出你的地狱人格代号——测完别删，留着自己哭。">
+<meta property="og:image" content="https://hikaoxx-tech.github.io/what-are-you/assets/share-card.png">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="800">
+<meta property="og:url" content="https://hikaoxx-tech.github.io/what-are-you/">
 <style>
 /* ============================================================
    《你是什么东西》样式
@@ -144,23 +152,67 @@ body {
 }
 .page-start .stamp { border-color: #E8716A; color: #E8716A; opacity: .9; }
 .cover-kicker {
-  font-size: 14px;
+  font-size: 12px;
   color: #7FB2E5;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   margin-bottom: 16px;
 }
 .cover-title {
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.32;
   letter-spacing: 3px;
   margin-bottom: 16px;
   color: #fff;
 }
-.cover-subtitle { font-size: 16px; color: rgba(255, 255, 255, .75); margin-bottom: 30px; }
-.cover-meta { font-size: 13px; color: rgba(255, 255, 255, .5); margin-bottom: 32px; }
-.cover-warn { font-size: 12px; color: rgba(255, 255, 255, .42); line-height: 1.7; margin-top: 22px; }
+.cover-subtitle { font-size: 16px; color: rgba(255, 255, 255, .75); margin-bottom: 24px; }
+.cover-meta { font-size: 13px; color: rgba(255, 255, 255, .5); margin-bottom: 22px; }
+.cover-warn { font-size: 12px; color: rgba(255, 255, 255, .42); line-height: 1.7; margin-top: 16px; }
 .cover-foot { text-align: center; margin-top: 18px; font-size: 12px; color: rgba(255, 255, 255, .3); }
+
+/* 档案试读题（好奇缺口） */
+.cover-teaser {
+  margin-bottom: 26px;
+  padding: 13px 14px 14px;
+  text-align: left;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 12px;
+  transition: opacity .35s ease, transform .35s ease;
+}
+.cover-teaser.fade-out { opacity: 0; transform: translateY(5px); }
+.ct-label { font-size: 11px; color: #7FB2E5; letter-spacing: 2px; margin-bottom: 8px; }
+.ct-q { font-size: 14px; line-height: 1.65; color: #fff; margin-bottom: 10px; }
+.ct-opts { display: flex; flex-direction: column; gap: 8px; }
+.ct-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, .08);
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, .85);
+}
+.ct-letter {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #7FB2E5;
+  font-size: 12px;
+}
+
+/* 归档计数 + 动物条 */
+.cover-file { margin-top: 18px; font-size: 12px; color: rgba(255, 255, 255, .55); letter-spacing: 1px; }
+.cover-animals { margin-top: 26px; }
+.ca-icons { display: flex; justify-content: center; flex-wrap: wrap; gap: 7px; }
+.ca-icons img {
+  width: 22px;
+  height: 22px;
+  opacity: .55;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35));
+}
+.ca-label { margin-top: 10px; text-align: center; font-size: 12px; color: rgba(255, 255, 255, .35); letter-spacing: 1px; }
 
 .btn-cover {
   background: #fff;
@@ -414,6 +466,20 @@ body {
 .result-actions .btn-main, .result-actions .btn-ghost { margin-bottom: 12px; }
 .result-tip { text-align: center; font-size: 12px; color: #9CA3AF; margin-top: 4px; }
 
+/* 转发挑战面板 */
+.share-challenge {
+  margin-bottom: 14px;
+  padding: 16px 14px 14px;
+  text-align: center;
+  background: #F3F7FC;
+  border: 1px dashed #2581C4;
+  border-radius: 12px;
+}
+.sc-title { font-size: 13px; font-weight: 700; color: #2581C4; letter-spacing: 3px; margin-bottom: 8px; }
+.sc-text { font-size: 15px; line-height: 1.7; color: #2B2F36; margin-bottom: 12px; }
+.sc-btn { max-width: 220px; padding: 9px 0; font-size: 14px; margin-bottom: 0; }
+.sc-tip { margin-top: 10px; font-size: 11px; color: #9CA3AF; line-height: 1.6; }
+
 /* ---------- 全部人格页 ---------- */
 .gallery-head { text-align: center; margin: 10px 0 22px; }
 .gallery-head h2 { font-size: 22px; font-weight: 700; }
@@ -499,12 +565,22 @@ body {
   <div class="bg-glow glow-2"></div>
   <div class="cover-card">
     <div class="stamp">非正式</div>
-    <p class="cover-kicker">《你是什么东西》</p>
-    <h1 class="cover-title">非官方<br>人格备案</h1>
+    <p class="cover-kicker">非官方人格备案 · 档案编号 No.2025-001</p>
+    <h1 class="cover-title">你是什么<br>东西？</h1>
     <p class="cover-subtitle">测完别删，留着自己哭</p>
-    <p class="cover-meta">30 道二选一 · 4 个维度 · 16 种人格代号 · 约 15 分钟</p>
+    <p class="cover-meta">30 道二选一 · 16 种地狱人格 · 约 3 分钟</p>
+    <div class="cover-teaser" id="cover-teaser">
+      <p class="ct-label">档案试读 · 第 <span id="ct-num"></span> 题</p>
+      <p class="ct-q" id="ct-q"></p>
+      <div class="ct-opts" id="ct-opts"></div>
+    </div>
     <button id="btn-start" class="btn-main btn-cover">开始测试</button>
+    <p class="cover-file" id="cover-file">16 种人格待归档 · 本机已归档 0 份</p>
     <p class="cover-warn">全部题目没有正确答案，只有错误答案。<br>本测试结果不具有任何科学依据，请放心相信。</p>
+  </div>
+  <div class="cover-animals">
+    <div class="ca-icons" id="ca-icons"></div>
+    <p class="ca-label">16 个物种档案已就位</p>
   </div>
   <p class="cover-foot">阅后即焚（并没有）</p>
 </section>
@@ -565,6 +641,12 @@ body {
   </div>
 
   <div class="result-actions">
+    <div class="share-challenge hidden" id="share-challenge">
+      <p class="sc-title">转发挑战</p>
+      <p class="sc-text" id="sc-text"></p>
+      <button id="btn-copy" class="btn-ghost sc-btn">复制挑战文案</button>
+      <p class="sc-tip" id="sc-tip"></p>
+    </div>
     <button id="btn-back-mine" class="btn-ghost hidden">← 返回我的结果</button>
     <button id="btn-capture" class="btn-main">生成分享长图</button>
     <button id="btn-gallery" class="btn-ghost">查看其他 15 种人格</button>
@@ -985,6 +1067,10 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
   var idx = 0;            // 当前题下标
   var myCode = null;      // 我的结果代码
   var viewingCode = null; // 当前查看的人格代码
+  var ARCHIVE_KEY = 'wa_archives';
+  var IS_WECHAT = /MicroMessenger/i.test(navigator.userAgent);
+  var TEASER_IDX = [2, 9, 10]; // 封面试读题：Q3 / Q10 / Q11
+  var teaserPos = 0;
 
   function initScores() {
     DIMS.forEach(function (d) { scores[d] = 0; });
@@ -995,6 +1081,58 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
       $(p).classList.toggle('hidden', p !== id);
     });
     window.scrollTo(0, 0);
+  }
+
+  // ---------- 封面试读题 / 归档计数 / 动物条 ----------
+
+  function renderTeaser() {
+    var q = QUESTIONS[TEASER_IDX[teaserPos]];
+    $('ct-num').textContent = TEASER_IDX[teaserPos] + 1;
+    $('ct-q').textContent = q.q;
+    var box = $('ct-opts');
+    box.innerHTML = '';
+    [q.a, q.b].forEach(function (text, i) {
+      var div = document.createElement('div');
+      div.className = 'ct-opt';
+      div.innerHTML = '<span class="ct-letter">' + (i === 0 ? 'A' : 'B') + '</span><span></span>';
+      div.lastChild.textContent = text;
+      box.appendChild(div);
+    });
+  }
+
+  function cycleTeaser() {
+    var el = $('cover-teaser');
+    el.classList.add('fade-out');
+    setTimeout(function () {
+      teaserPos = (teaserPos + 1) % TEASER_IDX.length;
+      renderTeaser();
+      el.classList.remove('fade-out');
+    }, 350);
+  }
+
+  function readArchives() {
+    try { return parseInt(localStorage.getItem(ARCHIVE_KEY) || '0', 10) || 0; }
+    catch (e) { return 0; }
+  }
+
+  function bumpArchives() {
+    try { localStorage.setItem(ARCHIVE_KEY, String(readArchives() + 1)); } catch (e) {}
+  }
+
+  function renderArchiveCount() {
+    $('cover-file').textContent = '16 种人格待归档 · 本机已归档 ' + readArchives() + ' 份';
+  }
+
+  function renderAnimalStrip() {
+    var box = $('ca-icons');
+    box.innerHTML = '';
+    GALLERY_ORDER.forEach(function (code) {
+      var img = document.createElement('img');
+      img.src = iconUrl(code);
+      img.alt = '';
+      img.onerror = function () { this.style.display = 'none'; };
+      box.appendChild(img);
+    });
   }
 
   // ---------- 答题 ----------
@@ -1089,7 +1227,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     }
   }
 
-  function renderType(t) {
+  function renderType(t, mine) {
     setIcon($('r-icon'), t.code);
     $('r-name').textContent = t.name;
     $('r-animal').textContent = '官方认证动物：' + t.animal;
@@ -1106,14 +1244,24 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
 
     $('r-file').textContent = t.file;
     $('r-easter').textContent = '彩蛋：' + t.easter;
+
+    // 转发挑战：只有"我的结果"才显示
+    $('share-challenge').classList.toggle('hidden', !mine);
+    if (mine) {
+      $('sc-text').textContent = '我测出来是「' + t.name + '·' + t.animal + '」，你是什么东西？ ' + location.href;
+    }
   }
 
   function showResult(mine) {
     var code = mine ? computeCode() : viewingCode;
-    if (mine) { myCode = code; }
+    if (mine) {
+      myCode = code;
+      bumpArchives();
+      renderArchiveCount();
+    }
     viewingCode = code;
 
-    renderType(TYPES[code]);
+    renderType(TYPES[code], mine);
     renderScales();
 
     // 查看他人档案时刻度显示 0（无得分信息）
@@ -1141,7 +1289,7 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
         (code === myCode ? '<span class="g-badge">就是你</span>' : '');
       card.addEventListener('click', function () {
         viewingCode = code;
-        renderType(TYPES[code]);
+        renderType(TYPES[code], false);
         renderScales();
         $('r-scales').querySelectorAll('.scale-fill').forEach(function (f) { f.style.display = 'none'; });
         $('btn-back-mine').classList.remove('hidden');
@@ -1209,9 +1357,43 @@ var EMBED_ICONS = {"ENFJ": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%
     $('overlay').classList.add('hidden');
   });
 
+  // 复制挑战文案（微信里贴给朋友）
+  $('btn-copy').addEventListener('click', function () {
+    var text = $('sc-text').textContent;
+    var btn = this;
+    var done = function (ok) {
+      btn.textContent = ok ? '已复制，去发给 TA' : '复制失败，请长按上方文字复制';
+      setTimeout(function () { btn.textContent = '复制挑战文案'; }, 2200);
+    };
+    var fallback = function () {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      done(ok);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
   // ---------- 初始化 ----------
 
   initScores();
+  $('sc-tip').textContent = IS_WECHAT
+    ? '点右上角 ··· 转发给朋友，让 TA 也测一下'
+    : '把上方文案发给朋友，或在微信里打开本页后转发';
+  renderTeaser();
+  setInterval(cycleTeaser, 4200);
+  renderArchiveCount();
+  renderAnimalStrip();
   showPage('page-start');
 })();
 

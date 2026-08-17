@@ -19,6 +19,10 @@
   var idx = 0;            // 当前题下标
   var myCode = null;      // 我的结果代码
   var viewingCode = null; // 当前查看的人格代码
+  var ARCHIVE_KEY = 'wa_archives';
+  var IS_WECHAT = /MicroMessenger/i.test(navigator.userAgent);
+  var TEASER_IDX = [2, 9, 10]; // 封面试读题：Q3 / Q10 / Q11
+  var teaserPos = 0;
 
   function initScores() {
     DIMS.forEach(function (d) { scores[d] = 0; });
@@ -29,6 +33,58 @@
       $(p).classList.toggle('hidden', p !== id);
     });
     window.scrollTo(0, 0);
+  }
+
+  // ---------- 封面试读题 / 归档计数 / 动物条 ----------
+
+  function renderTeaser() {
+    var q = QUESTIONS[TEASER_IDX[teaserPos]];
+    $('ct-num').textContent = TEASER_IDX[teaserPos] + 1;
+    $('ct-q').textContent = q.q;
+    var box = $('ct-opts');
+    box.innerHTML = '';
+    [q.a, q.b].forEach(function (text, i) {
+      var div = document.createElement('div');
+      div.className = 'ct-opt';
+      div.innerHTML = '<span class="ct-letter">' + (i === 0 ? 'A' : 'B') + '</span><span></span>';
+      div.lastChild.textContent = text;
+      box.appendChild(div);
+    });
+  }
+
+  function cycleTeaser() {
+    var el = $('cover-teaser');
+    el.classList.add('fade-out');
+    setTimeout(function () {
+      teaserPos = (teaserPos + 1) % TEASER_IDX.length;
+      renderTeaser();
+      el.classList.remove('fade-out');
+    }, 350);
+  }
+
+  function readArchives() {
+    try { return parseInt(localStorage.getItem(ARCHIVE_KEY) || '0', 10) || 0; }
+    catch (e) { return 0; }
+  }
+
+  function bumpArchives() {
+    try { localStorage.setItem(ARCHIVE_KEY, String(readArchives() + 1)); } catch (e) {}
+  }
+
+  function renderArchiveCount() {
+    $('cover-file').textContent = '16 种人格待归档 · 本机已归档 ' + readArchives() + ' 份';
+  }
+
+  function renderAnimalStrip() {
+    var box = $('ca-icons');
+    box.innerHTML = '';
+    GALLERY_ORDER.forEach(function (code) {
+      var img = document.createElement('img');
+      img.src = iconUrl(code);
+      img.alt = '';
+      img.onerror = function () { this.style.display = 'none'; };
+      box.appendChild(img);
+    });
   }
 
   // ---------- 答题 ----------
@@ -123,7 +179,7 @@
     }
   }
 
-  function renderType(t) {
+  function renderType(t, mine) {
     setIcon($('r-icon'), t.code);
     $('r-name').textContent = t.name;
     $('r-animal').textContent = '官方认证动物：' + t.animal;
@@ -140,14 +196,24 @@
 
     $('r-file').textContent = t.file;
     $('r-easter').textContent = '彩蛋：' + t.easter;
+
+    // 转发挑战：只有"我的结果"才显示
+    $('share-challenge').classList.toggle('hidden', !mine);
+    if (mine) {
+      $('sc-text').textContent = '我测出来是「' + t.name + '·' + t.animal + '」，你是什么东西？ ' + location.href;
+    }
   }
 
   function showResult(mine) {
     var code = mine ? computeCode() : viewingCode;
-    if (mine) { myCode = code; }
+    if (mine) {
+      myCode = code;
+      bumpArchives();
+      renderArchiveCount();
+    }
     viewingCode = code;
 
-    renderType(TYPES[code]);
+    renderType(TYPES[code], mine);
     renderScales();
 
     // 查看他人档案时刻度显示 0（无得分信息）
@@ -175,7 +241,7 @@
         (code === myCode ? '<span class="g-badge">就是你</span>' : '');
       card.addEventListener('click', function () {
         viewingCode = code;
-        renderType(TYPES[code]);
+        renderType(TYPES[code], false);
         renderScales();
         $('r-scales').querySelectorAll('.scale-fill').forEach(function (f) { f.style.display = 'none'; });
         $('btn-back-mine').classList.remove('hidden');
@@ -243,8 +309,42 @@
     $('overlay').classList.add('hidden');
   });
 
+  // 复制挑战文案（微信里贴给朋友）
+  $('btn-copy').addEventListener('click', function () {
+    var text = $('sc-text').textContent;
+    var btn = this;
+    var done = function (ok) {
+      btn.textContent = ok ? '已复制，去发给 TA' : '复制失败，请长按上方文字复制';
+      setTimeout(function () { btn.textContent = '复制挑战文案'; }, 2200);
+    };
+    var fallback = function () {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      done(ok);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
   // ---------- 初始化 ----------
 
   initScores();
+  $('sc-tip').textContent = IS_WECHAT
+    ? '点右上角 ··· 转发给朋友，让 TA 也测一下'
+    : '把上方文案发给朋友，或在微信里打开本页后转发';
+  renderTeaser();
+  setInterval(cycleTeaser, 4200);
+  renderArchiveCount();
+  renderAnimalStrip();
   showPage('page-start');
 })();

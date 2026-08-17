@@ -135,23 +135,67 @@ body {
 }
 .page-start .stamp { border-color: #E8716A; color: #E8716A; opacity: .9; }
 .cover-kicker {
-  font-size: 14px;
+  font-size: 12px;
   color: #7FB2E5;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   margin-bottom: 16px;
 }
 .cover-title {
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.32;
   letter-spacing: 3px;
   margin-bottom: 16px;
   color: #fff;
 }
-.cover-subtitle { font-size: 16px; color: rgba(255, 255, 255, .75); margin-bottom: 30px; }
-.cover-meta { font-size: 13px; color: rgba(255, 255, 255, .5); margin-bottom: 32px; }
-.cover-warn { font-size: 12px; color: rgba(255, 255, 255, .42); line-height: 1.7; margin-top: 22px; }
+.cover-subtitle { font-size: 16px; color: rgba(255, 255, 255, .75); margin-bottom: 24px; }
+.cover-meta { font-size: 13px; color: rgba(255, 255, 255, .5); margin-bottom: 22px; }
+.cover-warn { font-size: 12px; color: rgba(255, 255, 255, .42); line-height: 1.7; margin-top: 16px; }
 .cover-foot { text-align: center; margin-top: 18px; font-size: 12px; color: rgba(255, 255, 255, .3); }
+
+/* 档案试读题（好奇缺口） */
+.cover-teaser {
+  margin-bottom: 26px;
+  padding: 13px 14px 14px;
+  text-align: left;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 12px;
+  transition: opacity .35s ease, transform .35s ease;
+}
+.cover-teaser.fade-out { opacity: 0; transform: translateY(5px); }
+.ct-label { font-size: 11px; color: #7FB2E5; letter-spacing: 2px; margin-bottom: 8px; }
+.ct-q { font-size: 14px; line-height: 1.65; color: #fff; margin-bottom: 10px; }
+.ct-opts { display: flex; flex-direction: column; gap: 8px; }
+.ct-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, .08);
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, .85);
+}
+.ct-letter {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #7FB2E5;
+  font-size: 12px;
+}
+
+/* 归档计数 + 动物条 */
+.cover-file { margin-top: 18px; font-size: 12px; color: rgba(255, 255, 255, .55); letter-spacing: 1px; }
+.cover-animals { margin-top: 26px; }
+.ca-icons { display: flex; justify-content: center; flex-wrap: wrap; gap: 7px; }
+.ca-icons img {
+  width: 22px;
+  height: 22px;
+  opacity: .55;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35));
+}
+.ca-label { margin-top: 10px; text-align: center; font-size: 12px; color: rgba(255, 255, 255, .35); letter-spacing: 1px; }
 
 .btn-cover {
   background: #fff;
@@ -404,6 +448,20 @@ body {
 .result-actions { margin-top: 8px; }
 .result-actions .btn-main, .result-actions .btn-ghost { margin-bottom: 12px; }
 .result-tip { text-align: center; font-size: 12px; color: #9CA3AF; margin-top: 4px; }
+
+/* 转发挑战面板 */
+.share-challenge {
+  margin-bottom: 14px;
+  padding: 16px 14px 14px;
+  text-align: center;
+  background: #F3F7FC;
+  border: 1px dashed #2581C4;
+  border-radius: 12px;
+}
+.sc-title { font-size: 13px; font-weight: 700; color: #2581C4; letter-spacing: 3px; margin-bottom: 8px; }
+.sc-text { font-size: 15px; line-height: 1.7; color: #2B2F36; margin-bottom: 12px; }
+.sc-btn { max-width: 220px; padding: 9px 0; font-size: 14px; margin-bottom: 0; }
+.sc-tip { margin-top: 10px; font-size: 11px; color: #9CA3AF; line-height: 1.6; }
 
 /* ---------- 全部人格页 ---------- */
 .gallery-head { text-align: center; margin: 10px 0 22px; }
