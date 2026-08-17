@@ -4,6 +4,9 @@
 # 打包备份，不进版本库
 /人格测试.rar
 
+# 字体源文件（24MB OTF，可重新下载），只提交 17KB 子集
+/assets/fonts/*.otf
+
 # 系统文件
 .DS_Store
 Thumbs.db

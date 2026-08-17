@@ -20,6 +20,17 @@ app_js = (ROOT / 'js' / 'app.js').read_text(encoding='utf-8')
 html2canvas_js = (ROOT / 'assets' / 'vendor' / 'html2canvas.min.js').read_text(encoding='utf-8')
 qrcode_js = (ROOT / 'assets' / 'vendor' / 'qrcode.min.js').read_text(encoding='utf-8')
 
+# 标题字体子集 → base64 内联（单文件版完全自包含，file:// 直开也有 display 字体）
+font_path = ROOT / 'assets' / 'fonts' / 'wa-display.woff2'
+if font_path.is_file():
+    import base64
+    font_b64 = base64.b64encode(font_path.read_bytes()).decode('ascii')
+    css = css.replace(
+        "url('../assets/fonts/wa-display.woff2')",
+        "url(data:font/woff2;base64," + font_b64 + ")"
+    )
+    print('标题字体已内联:', font_path.name, f'({font_path.stat().st_size // 1024} KB → base64)')
+
 # 16 张动物 SVG → data URI（utf8 编码，全量转义）
 icons = {}
 for p in sorted((ROOT / 'assets' / 'animals').glob('*.svg')):
@@ -46,5 +57,6 @@ out = html.replace(
 
 OUT.parent.mkdir(exist_ok=True)
 OUT.write_text(out, encoding='utf-8')
+
 size_kb = OUT.stat().st_size / 1024
 print('生成完成:', OUT, f'({size_kb:.0f} KB, {len(icons)} 个图标已内联)')

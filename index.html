@@ -42,7 +42,9 @@ var _hmt = _hmt || [];
       <p class="ct-q" id="ct-q"></p>
       <div class="ct-opts" id="ct-opts"></div>
     </div>
+    <button id="btn-resume" class="btn-main btn-cover btn-resume hidden">继续上次测试</button>
     <button id="btn-start" class="btn-main btn-cover">开始测试</button>
+    <button id="btn-start-quick" class="btn-quick">没耐心？12 题快测版 →</button>
     <p class="cover-file" id="cover-file">16 种人格待归档 · 本机已归档 0 份</p>
     <p class="cover-warn">全部题目没有正确答案，只有错误答案。<br>本测试结果不具有任何科学依据，请放心相信。</p>
   </div>
@@ -57,6 +59,7 @@ var _hmt = _hmt || [];
 <section id="page-quiz" class="page hidden">
   <div class="quiz-head">
     <span id="q-count" class="q-count">第 1 / 30 题</span>
+    <span id="q-mode" class="q-mode hidden"></span>
     <div class="bar"><div id="q-bar" class="bar-fill"></div></div>
   </div>
   <div class="quiz-body">
@@ -84,6 +87,7 @@ var _hmt = _hmt || [];
       <div id="r-name" class="type-name"></div>
       <div id="r-animal" class="type-animal"></div>
       <div id="r-rarity" class="rarity-badge hidden"></div>
+      <p id="r-quick-note" class="quick-note hidden">快测版 · 结果仅供参考<br>再答 18 题即可升级为完整档案</p>
     </div>
     <div id="r-scales" class="scales"></div>
     <div class="block">
@@ -127,6 +131,7 @@ var _hmt = _hmt || [];
       <button id="btn-give" class="btn-ghost sc-btn">复制并发给 TA</button>
     </div>
     <button id="btn-back-mine" class="btn-ghost hidden">← 返回我的结果</button>
+    <button id="btn-upgrade" class="btn-main btn-upgrade hidden">再答 18 题，升级完整档案 →</button>
     <button id="btn-capture" class="btn-main">生成分享长图</button>
     <button id="btn-gallery" class="btn-ghost">查看其他 15 种人格</button>
     <button id="btn-restart" class="btn-ghost">重新测试</button>
